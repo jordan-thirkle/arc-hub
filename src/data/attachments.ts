@@ -1,0 +1,186 @@
+import type { Attachment } from '../types';
+
+export const attachments: Attachment[] = [
+  // ── Muzzle ──
+  { id: 'silencer', name: 'Silencer', tier: 2, slot: 'muzzle', type: 'Silencer',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'renegade', 'stitcher', 'canto', 'bobcat', 'burletta', 'anvil', 'torrente', 'osprey'],
+    effects: { verticalRecoil: -5, horizontalRecoil: -3 },
+    penalties: { range: -5, bulletVelocity: -30 },
+    description: 'Reduces gunshot audio. Small recoil improvement. Reduces range slightly.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 6 },
+      { id: 'polymer', name: 'Polymer', quantity: 3 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 2 },
+    ]}},
+  { id: 'compensator', name: 'Compensator', tier: 1, slot: 'muzzle', type: 'Compensator',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'renegade', 'stitcher', 'canto', 'bobcat', 'burletta', 'anvil', 'torrente', 'osprey'],
+    effects: { verticalRecoil: -12, horizontalRecoil: -5 },
+    description: 'Reduces vertical recoil significantly.',
+    crafting: { station: 'Gunsmith Bench', level: 1, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 1 },
+    ]}},
+  { id: 'muzzle-brake', name: 'Muzzle Brake', tier: 3, slot: 'muzzle', type: 'Muzzle Brake',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'renegade', 'stitcher', 'canto', 'bobcat', 'burletta', 'anvil', 'torrente', 'osprey'],
+    effects: { verticalRecoil: -8, horizontalRecoil: -15 },
+    penalties: { adsSpeed: 0.05 },
+    description: 'Reduces horizontal recoil significantly. Slight ADS penalty.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 3 },
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 2 },
+    ]}},
+  { id: 'extended-barrel', name: 'Extended Barrel', tier: 3, slot: 'muzzle', type: 'Extended Barrel',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'renegade', 'stitcher', 'canto', 'bobcat', 'burletta', 'anvil', 'torrente', 'osprey'],
+    effects: { range: 10, bulletVelocity: 50, damage: 1 },
+    penalties: { adsSpeed: 0.08, weight: 0.3 },
+    description: 'Increases damage, range, and velocity. Heavier, slower ADS.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 4 },
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 8 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 3 },
+    ]}},
+
+  // ── Shotgun Muzzle ──
+  { id: 'shotgun-choke', name: 'Shotgun Choke', tier: 2, slot: 'shotgun-muzzle', type: 'Shotgun Choke',
+    compatibleWith: ['iltoro', 'vulcano'],
+    effects: { dispersion: -1.5, range: 5 },
+    description: 'Tightens pellet spread. Increases effective range.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 5 },
+      { id: 'polymer', name: 'Polymer', quantity: 2 },
+    ]}},
+  { id: 'shotgun-silencer', name: 'Shotgun Silencer', tier: 3, slot: 'shotgun-muzzle', type: 'Shotgun Silencer',
+    compatibleWith: ['iltoro', 'vulcano'],
+    effects: { dispersion: -0.5 },
+    penalties: { range: -3, damage: -5 },
+    description: 'Silences shotgun. Reduces damage and range slightly.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 2 },
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 6 },
+      { id: 'polymer', name: 'Polymer', quantity: 4 },
+    ]}},
+
+  // ── Underbarrel ──
+  { id: 'vertical-grip', name: 'Vertical Grip', tier: 1, slot: 'underbarrel', type: 'Vertical Grip',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'osprey', 'hullcracker', 'venator'],
+    effects: { verticalRecoil: -10 },
+    penalties: { adsSpeed: 0.03 },
+    description: 'Reduces vertical recoil. Slight ADS speed penalty.',
+    crafting: { station: 'Gunsmith Bench', level: 1, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 3 },
+      { id: 'polymer', name: 'Polymer', quantity: 2 },
+    ]}},
+  { id: 'angled-grip', name: 'Angled Grip', tier: 2, slot: 'underbarrel', type: 'Angled Grip',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'osprey', 'hullcracker', 'venator'],
+    effects: { adsSpeed: -0.05, dispersion: -0.3 },
+    description: 'Faster ADS. Slightly tighter hip fire spread.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'polymer', name: 'Polymer', quantity: 3 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 1 },
+    ]}},
+  { id: 'horizontal-grip', name: 'Horizontal Grip', tier: 3, slot: 'underbarrel', type: 'Horizontal Grip',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'osprey', 'hullcracker', 'venator'],
+    effects: { horizontalRecoil: -15 },
+    penalties: { reloadSpeed: 0.1 },
+    description: 'Greatly reduces horizontal recoil. Slower reload.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 2 },
+      { id: 'polymer', name: 'Polymer', quantity: 4 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 2 },
+    ]}},
+
+  // ── Magazines ──
+  { id: 'extended-light-mag', name: 'Extended Light Mag', tier: 2, slot: 'light-magazine', type: 'Extended Light Mag',
+    compatibleWith: ['kettle', 'stitcher', 'bobcat', 'hairpin', 'burletta'],
+    effects: { magSize: 6 },
+    penalties: { reloadSpeed: 0.15 },
+    description: '+6 rounds. Slightly slower reload.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'spring-kit', name: 'Spring Kit', quantity: 1 },
+      { id: 'polymer', name: 'Polymer', quantity: 2 },
+    ]}},
+  { id: 'extended-medium-mag', name: 'Extended Medium Mag', tier: 2, slot: 'medium-magazine', type: 'Extended Medium Mag',
+    compatibleWith: ['arpeggio', 'tempest', 'renegade', 'canto', 'venator', 'torrente', 'osprey'],
+    effects: { magSize: 6 },
+    penalties: { reloadSpeed: 0.15 },
+    description: '+6 rounds. Slightly slower reload.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 5 },
+      { id: 'spring-kit', name: 'Spring Kit', quantity: 1 },
+      { id: 'polymer', name: 'Polymer', quantity: 2 },
+    ]}},
+  { id: 'extended-shotgun-mag', name: 'Extended Shotgun Mag', tier: 3, slot: 'shotgun-magazine', type: 'Extended Shotgun Mag',
+    compatibleWith: ['iltoro', 'vulcano'],
+    effects: { magSize: 2 },
+    penalties: { reloadSpeed: 0.3 },
+    description: '+2 shells. Slower reload.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 1 },
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'spring-kit', name: 'Spring Kit', quantity: 2 },
+    ]}},
+
+  // ── Stocks ──
+  { id: 'stable-stock', name: 'Stable Stock', tier: 2, slot: 'stock', type: 'Stable Stock',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'bettina', 'ferro', 'renegade', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'torrente', 'osprey', 'hullcracker'],
+    effects: { verticalRecoil: -8, horizontalRecoil: -5, dispersion: -0.3 },
+    penalties: { adsSpeed: 0.05, movementSpeed: -0.02 },
+    description: 'Significantly reduces recoil. Slight handling penalty.',
+    crafting: { station: 'Gunsmith Bench', level: 2, materials: [
+      { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
+      { id: 'polymer', name: 'Polymer', quantity: 3 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 1 },
+    ]}},
+  { id: 'lightweight-stock', name: 'Lightweight Stock', tier: 3, slot: 'stock', type: 'Lightweight Stock',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'bettina', 'ferro', 'renegade', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'torrente', 'osprey', 'hullcracker'],
+    effects: { adsSpeed: -0.08, movementSpeed: 0.02 },
+    penalties: { verticalRecoil: 5, horizontalRecoil: 3 },
+    description: 'Faster handling and movement. Increases recoil slightly.',
+    crafting: { station: 'Gunsmith Bench', level: 3, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 2 },
+      { id: 'polymer', name: 'Polymer', quantity: 5 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 2 },
+    ]}},
+  { id: 'padded-stock', name: 'Padded Stock', tier: 1, slot: 'stock', type: 'Padded Stock',
+    compatibleWith: ['kettle', 'rattler', 'arpeggio', 'bettina', 'ferro', 'renegade', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'torrente', 'osprey', 'hullcracker'],
+    effects: { dispersion: -0.5, verticalRecoil: -3 },
+    penalties: { adsSpeed: 0.03 },
+    description: 'Reduces weapon sway and dispersion. Cheap.',
+    crafting: { station: 'Gunsmith Bench', level: 1, materials: [
+      { id: 'polymer', name: 'Polymer', quantity: 4 },
+      { id: 'fabric', name: 'Fabric', quantity: 2 },
+    ]}},
+
+  // ── Tech Mod ──
+  { id: 'kinetic-converter', name: 'Kinetic Converter', tier: 4, slot: 'tech-mod', type: 'Kinetic Converter',
+    compatibleWith: ['anvil'],
+    effects: { damage: 5, fireRate: -2 },
+    penalties: { reloadSpeed: 0.2 },
+    description: 'Converts kinetic energy. +5 damage, -2 fire rate.',
+    crafting: { station: 'Electronics Bench', level: 3, materials: [
+      { id: 'circuit-board', name: 'Circuit Board', quantity: 4 },
+      { id: 'energy-cell', name: 'Energy Cell', quantity: 2 },
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 2 },
+    ]}},
+  { id: 'anvil-splitter', name: 'Anvil Splitter', tier: 4, slot: 'tech-mod', type: 'Anvil Splitter',
+    compatibleWith: ['anvil'],
+    effects: { dispersion: -0.8 },
+    penalties: { magSize: -2 },
+    description: 'Splits Anvil rounds for tighter grouping. -2 mag size.',
+    crafting: { station: 'Gunsmith Bench', level: 4, materials: [
+      { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 5 },
+      { id: 'circuit-board', name: 'Circuit Board', quantity: 3 },
+      { id: 'screw-set', name: 'Screw Set', quantity: 3 },
+    ]}},
+];
+
+export function getAttachmentById(id: string): Attachment | undefined {
+  return attachments.find(a => a.id === id);
+}
+
+export function getAttachmentsBySlot(slot: Attachment['slot']): Attachment[] {
+  return attachments.filter(a => a.slot === slot);
+}

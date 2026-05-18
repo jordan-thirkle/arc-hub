@@ -1,0 +1,64 @@
+import type { QuickUseItem } from '../types';
+
+export const quickUseItems: QuickUseItem[] = [
+  // ── Medical ──
+  { id: 'med-kit-basic', name: 'Basic Med Kit', category: 'Medical', weight: 0.05, effect: 'Restore 50 HP over 5s', description: 'Slow heal. Low weight.', rarity: 'Common' },
+  { id: 'med-kit-advanced', name: 'Advanced Med Kit', category: 'Medical', weight: 0.10, effect: 'Restore 100 HP over 4s', description: 'Moderate heal. Fast application.', rarity: 'Uncommon' },
+  { id: 'med-kit-surgical', name: 'Surgical Kit', category: 'Medical', weight: 0.15, effect: 'Restore 200 HP over 3s', description: 'Full heal. Rare and expensive.', rarity: 'Rare' },
+  { id: 'bandage', name: 'Bandage', category: 'Medical', weight: 0.02, effect: 'Restore 25 HP over 8s', description: 'Budget heal. Slow.', rarity: 'Common' },
+  { id: 'stim-shot', name: 'Stim Shot', category: 'Medical', weight: 0.03, effect: 'Restore 75 HP instantly', description: 'Instant heal. Moderate cost.', rarity: 'Uncommon' },
+  { id: 'painkiller', name: 'Painkiller', category: 'Medical', weight: 0.02, effect: 'Suppress pain sounds by 60% for 30s', description: 'Quiet your injuries.', rarity: 'Common' },
+  { id: 'antidote', name: 'Antidote', category: 'Medical', weight: 0.05, effect: 'Cure all poison and toxin effects', description: 'Essential for Hazard Zone.', rarity: 'Uncommon' },
+  { id: 'blood-pack', name: 'Blood Pack', category: 'Medical', weight: 0.10, effect: 'Restore 150 HP over 10s. Stacks.', description: 'Slow but powerful heal.', rarity: 'Rare' },
+
+  // ── Shield ──
+  { id: 'shield-cell', name: 'Shield Cell', category: 'Shield', weight: 0.10, effect: 'Restore 25 shield charge', description: 'Standard shield recharge.', rarity: 'Common' },
+  { id: 'shield-pack', name: 'Shield Pack', category: 'Shield', weight: 0.20, effect: 'Restore 75 shield charge', description: 'Heavy shield recharge.', rarity: 'Uncommon' },
+  { id: 'shield-overcharge', name: 'Shield Overcharge', category: 'Shield', weight: 0.30, effect: 'Restore 150 shield + 25 overcharge for 10s', description: 'Temp bonus shield.', rarity: 'Rare' },
+
+  // ── Stamina ──
+  { id: 'energy-drink', name: 'Energy Drink', category: 'Stamina', weight: 0.02, effect: 'Restore 30 stamina over 5s', description: 'Quick stamina top-up.', rarity: 'Common' },
+  { id: 'stamina-booster', name: 'Stamina Booster', category: 'Stamina', weight: 0.04, effect: 'Restore 60 stamina over 3s', description: 'Fast stamina recovery.', rarity: 'Uncommon' },
+  { id: 'adrenaline-shot', name: 'Adrenaline Shot', category: 'Stamina', weight: 0.03, effect: 'Restore 100 stamina instantly. +20% sprint speed 10s', description: 'Emergency burst.', rarity: 'Rare' },
+
+  // ── Grenade ──
+  { id: 'frag-grenade', name: 'Frag Grenade', category: 'Grenade', weight: 0.30, effect: 'Explosive. 8m radius. 80-120 damage', description: 'Standard frag.', rarity: 'Common' },
+  { id: 'flashbang', name: 'Flashbang', category: 'Grenade', weight: 0.20, effect: 'Blind + deafen enemies 3s in 12m', description: 'Non-lethal crowd control.', rarity: 'Common' },
+  { id: 'smoke-grenade', name: 'Smoke Grenade', category: 'Grenade', weight: 0.25, effect: 'Smoke screen 6m radius for 12s', description: 'Visual cover.', rarity: 'Common' },
+  { id: 'incendiary-grenade', name: 'Incendiary Grenade', category: 'Grenade', weight: 0.30, effect: 'Fire zone 5m radius for 8s. 20 damage/tick', description: 'Area denial.', rarity: 'Uncommon' },
+  { id: 'emp-grenade', name: 'EMP Grenade', category: 'Grenade', weight: 0.25, effect: 'Disable electronics in 10m for 6s', description: 'Shuts down turrets, scanners.', rarity: 'Uncommon' },
+  { id: 'proximity-mine', name: 'Proximity Mine', category: 'Grenade', weight: 0.40, effect: 'Placeable. 100 damage on trigger. 3m radius', description: 'Trap for chokepoints.', rarity: 'Uncommon' },
+  { id: 'gas-grenade', name: 'Gas Grenade', category: 'Grenade', weight: 0.25, effect: 'Toxic cloud 5m for 10s. 15 damage/tick', description: 'Denies area + damages.', rarity: 'Rare' },
+  { id: 'cluster-grenade', name: 'Cluster Grenade', category: 'Grenade', weight: 0.35, effect: 'Explodes into 6 sub-munitions. 50 damage each', description: 'Spread damage.', rarity: 'Rare' },
+
+  // ── Utility ──
+  { id: 'lockpick', name: 'Lockpick', category: 'Utility', weight: 0.02, effect: 'Opens locked doors/containers (Common)', description: 'Basic lock cracking.', rarity: 'Common' },
+  { id: 'lockpick-advanced', name: 'Advanced Lockpick', category: 'Utility', weight: 0.03, effect: 'Opens locked doors/containers (Rare)', description: 'For higher-tier locks.', rarity: 'Uncommon' },
+  { id: 'lockpick-master', name: 'Master Lockpick', category: 'Utility', weight: 0.04, effect: 'Opens locked doors/containers (Epic)', description: 'Opens anything.', rarity: 'Rare' },
+  { id: 'data-spike', name: 'Data Spike', category: 'Utility', weight: 0.02, effect: 'Hack terminals. 5s hack time', description: 'Quick terminal hack.', rarity: 'Common' },
+  { id: 'data-spike-advanced', name: 'Advanced Data Spike', category: 'Utility', weight: 0.03, effect: 'Hack terminals. 3s hack time', description: 'Fast terminal hack.', rarity: 'Uncommon' },
+  { id: 'binoculars', name: 'Binoculars', category: 'Utility', weight: 0.10, effect: 'Mark enemies up to 200m. 30s cooldown', description: 'Recon tool.', rarity: 'Common' },
+  { id: 'range-finder', name: 'Range Finder', category: 'Utility', weight: 0.08, effect: 'Show distance to target and bullet drop', description: 'Sniper assist.', rarity: 'Uncommon' },
+  { id: 'flare', name: 'Flare', category: 'Utility', weight: 0.05, effect: 'Signal extract. 30s delivery', description: 'Calls extraction.', rarity: 'Common' },
+  { id: 'flare-tactical', name: 'Tactical Flare', category: 'Utility', weight: 0.05, effect: 'Signal extract. 15s delivery', description: 'Faster extraction call.', rarity: 'Uncommon' },
+  { id: 'flashlight', name: 'Flashlight', category: 'Utility', weight: 0.10, effect: 'Illuminate dark areas. 20m beam', description: 'See in the dark.', rarity: 'Common' },
+  { id: 'night-vision', name: 'Night Vision Goggles', category: 'Utility', weight: 0.20, effect: 'Thermal vision. 30s battery', description: 'See heat signatures.', rarity: 'Rare' },
+  { id: 'repair-kit', name: 'Repair Kit', category: 'Utility', weight: 0.15, effect: 'Repair weapon durability by 25%', description: 'Fix your gun mid-raid.', rarity: 'Uncommon' },
+  { id: 'repair-kit-advanced', name: 'Advanced Repair Kit', category: 'Utility', weight: 0.20, effect: 'Repair weapon durability by 50%', description: 'Major gun repair.', rarity: 'Rare' },
+  { id: 'jump-pack', name: 'Jump Pack', category: 'Utility', weight: 0.30, effect: 'Jet jump. 10s cooldown. 5 charges', description: 'Reach high ledges.', rarity: 'Rare' },
+  { id: 'grapple-hook', name: 'Grapple Hook', category: 'Utility', weight: 0.25, effect: 'Grapple to ledges. 8s cooldown', description: 'Vertical mobility.', rarity: 'Rare' },
+
+  // ── Trap ──
+  { id: 'tripwire', name: 'Tripwire', category: 'Trap', weight: 0.15, effect: 'Alert trap. 5m trip line. Loud alarm', description: 'Early warning system.', rarity: 'Common' },
+  { id: 'bear-trap', name: 'Bear Trap', category: 'Trap', weight: 0.25, effect: 'Damage + immobilize 3s. 60 damage', description: 'Crowd control trap.', rarity: 'Common' },
+  { id: 'sonic-trap', name: 'Sonic Trap', category: 'Trap', weight: 0.20, effect: 'Disorient enemies in 6m for 4s', description: 'Area disorient.', rarity: 'Uncommon' },
+  { id: 'motion-sensor', name: 'Motion Sensor', category: 'Trap', weight: 0.10, effect: 'Detect movement in 15m. Pings on minimap', description: 'Passive detection.', rarity: 'Uncommon' },
+];
+
+export function getQuickUseItemById(id: string): QuickUseItem | undefined {
+  return quickUseItems.find(i => i.id === id);
+}
+
+export function getItemsByCategory(category: QuickUseItem['category']): QuickUseItem[] {
+  return quickUseItems.filter(i => i.category === category);
+}
