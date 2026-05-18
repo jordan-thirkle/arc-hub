@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0e14"/>
+      <stop offset="100%" stop-color="#131920"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="2" fill="#e8a832"/>
+  <rect x="0" y="628" width="1200" height="2" fill="#e8a832"/>
+  <rect x="60" y="140" width="480" height="350" fill="#1c2530" stroke="#2a3545" stroke-width="1"/>
+  <rect x="560" y="140" width="580" height="350" fill="#1c2530" stroke="#2a3545" stroke-width="1"/>
+  <text x="780" y="200" font-family="'Inter',sans-serif" font-size="22" font-weight="600" fill="#e8a832" letter-spacing="2" text-anchor="middle">ARC RAIDERS</text>
+  <text x="780" y="235" font-family="'Inter',sans-serif" font-size="40" font-weight="300" fill="#e8edf2" letter-spacing="1" text-anchor="middle">Loadout Planner</text>
+  <text x="780" y="275" font-family="'Inter',sans-serif" font-size="18" fill="#8899aa" text-anchor="middle">Plan. Optimize. Extract.</text>
+  <rect x="660" y="310" width="240" height="50" fill="#e8a832" rx="0"/>
+  <text x="780" y="342" font-family="monospace" font-size="16" font-weight="700" fill="#0a0e14" text-anchor="middle" letter-spacing="2">TRY THE PLANNER</text>
+  <line x1="560" y1="420" x2="1140" y2="420" stroke="#2a3545" stroke-width="1"/>
+  <text x="780" y="450" font-family="'Inter',sans-serif" font-size="13" fill="#5a6a7a" text-anchor="middle">Browse 22 weapons &amp; 40+ attachments</text>
+  <text x="780" y="472" font-family="'Inter',sans-serif" font-size="13" fill="#5a6a7a" text-anchor="middle">Real-time stat calculations &amp; shareable build URLs</text>
+  <text x="300" y="200" font-family="monospace" font-size="14" fill="#8899aa" letter-spacing="1">WEAPONS</text>
+  <rect x="80" y="230" width="140" height="80" fill="#131920" stroke="#2a3545" stroke-width="1"/>
+  <text x="150" y="268" font-family="'Inter',sans-serif" font-size="16" font-weight="600" fill="#e8edf2" text-anchor="middle">Tempest</text>
+  <text x="150" y="286" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">medium · auto</text>
+  <rect x="230" y="230" width="140" height="80" fill="#131920" stroke="#e8a832" stroke-width="2"/>
+  <text x="300" y="268" font-family="'Inter',sans-serif" font-size="16" font-weight="600" fill="#e8edf2" text-anchor="middle">Rattler</text>
+  <text x="300" y="286" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">medium · auto</text>
+  <rect x="380" y="230" width="140" height="80" fill="#131920" stroke="#2a3545" stroke-width="1"/>
+  <text x="450" y="268" font-family="'Inter',sans-serif" font-size="16" font-weight="600" fill="#e8edf2" text-anchor="middle">Ferro</text>
+  <text x="450" y="286" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">heavy · break</text>
+  <rect x="80" y="330" width="140" height="60" fill="#131920" stroke="#2a3545" stroke-width="1"/>
+  <text x="150" y="358" font-family="'Inter',sans-serif" font-size="14" font-weight="500" fill="#e8edf2" text-anchor="middle">Stitcher SMG</text>
+  <text x="150" y="374" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">light · auto</text>
+  <rect x="230" y="330" width="140" height="60" fill="#131920" stroke="#2a3545" stroke-width="1"/>
+  <text x="300" y="358" font-family="'Inter',sans-serif" font-size="14" font-weight="500" fill="#e8edf2" text-anchor="middle">Osprey</text>
+  <text x="300" y="374" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">medium · bolt</text>
+  <rect x="380" y="330" width="140" height="60" fill="#131920" stroke="#2a3545" stroke-width="1"/>
+  <text x="450" y="358" font-family="'Inter',sans-serif" font-size="14" font-weight="500" fill="#e8edf2" text-anchor="middle">Anvil</text>
+  <text x="450" y="374" font-family="monospace" font-size="10" fill="#5a6a7a" text-anchor="middle">heavy · single</text>
+  <text x="300" y="430" font-family="monospace" font-size="11" fill="#5a6a7a" text-anchor="middle">9 classes · 22 weapons · 40+ attachments</text>
+  <circle cx="1100" cy="40" r="20" fill="none" stroke="#e8a832" stroke-width="2"/>
+  <text x="1100" y="46" font-family="monospace" font-size="14" fill="#e8a832" text-anchor="middle">AR</text>
+</svg>
