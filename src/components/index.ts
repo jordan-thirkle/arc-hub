@@ -10,8 +10,6 @@ export { BuildActions } from './BuildActions';
 export { Header } from './Header';
 export { SkillTreeViewer } from './SkillTreeViewer';
 export { PatchNotes } from './PatchNotes';
-export { WeaponComparison } from './WeaponComparison';
-export { BuildSubmissionForm } from './BuildSubmissionForm';
-export { SkillGraphView } from './SkillGraphView';
+
 export { AdUnit } from './AdUnit';
 export { GearAffiliate } from './GearAffiliate';

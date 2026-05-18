@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { weapons, getWeaponById } from './data/weapons';
 import { attachments } from './data/attachments';
@@ -7,7 +7,11 @@ import { shields } from './data/shields';
 import { quickUseItems } from './data/quickuse';
 import { metaBuilds } from './data/metaBuilds';
 import { craftingRecipes } from './data/crafting';
-import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, WeaponComparison, BuildSubmissionForm, SkillGraphView, AdUnit, GearAffiliate } from './components';
+import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate } from './components';
+
+const WeaponComparison = lazy(() => import('./components/WeaponComparison').then(m => ({ default: m.WeaponComparison })));
+const BuildSubmissionForm = lazy(() => import('./components/BuildSubmissionForm').then(m => ({ default: m.BuildSubmissionForm })));
+const SkillGraphView = lazy(() => import('./components/SkillGraphView').then(m => ({ default: m.SkillGraphView })));
 import { useBuild } from './hooks/useBuild';
 import { useSkills } from './hooks/useSkills';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -148,7 +152,9 @@ export default function App() {
               </div>
 
               {showComparison && (
-                <WeaponComparison />
+                <Suspense fallback={<div className="h-48 animate-pulse bg-[rgb(var(--bg-elevated))]" />}>
+                  <WeaponComparison />
+                </Suspense>
               )}
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -544,9 +550,11 @@ export default function App() {
                   allocation={allocation} totalPoints={totalPoints}
                   remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
               ) : (
-                <SkillGraphView
-                  allocation={allocation} totalPoints={totalPoints}
-                  remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
+                <Suspense fallback={<div className="h-[600px] animate-pulse bg-[rgb(var(--bg-elevated))]" />}>
+                  <SkillGraphView
+                    allocation={allocation} totalPoints={totalPoints}
+                    remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
+                </Suspense>
               )}
             </div>
           )}
@@ -657,7 +665,8 @@ export default function App() {
       </div>
 
       {showSubmissionForm && (
-        <BuildSubmissionForm
+        <Suspense fallback={null}>
+          <BuildSubmissionForm
           currentBuild={{
             primaryWeaponId: build.primaryWeaponId,
             primaryTier: build.primaryTier,
@@ -669,6 +678,7 @@ export default function App() {
           }}
           onClose={() => setShowSubmissionForm(false)}
         />
+        </Suspense>
       )}
     </>
   );

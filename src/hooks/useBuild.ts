@@ -90,7 +90,6 @@ export function useBuild() {
   const reset = useCallback(() => {
     setBuild({
       ...DEFAULT_BUILD,
-      // eslint-disable-next-line react-hooks/purity
       id: crypto.randomUUID?.() ?? Date.now().toString(36),
       createdAt: new Date().toISOString(),
     });
