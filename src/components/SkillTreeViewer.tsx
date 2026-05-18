@@ -35,7 +35,6 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
 
   const canAdd = canAllocate(nodeId, allocation).allowed;
   const canRemove = canDeallocate(nodeId, allocation).allowed;
-  const isMaxed = points >= node.maxPoints;
   const hasPoints = points > 0;
 
   return (

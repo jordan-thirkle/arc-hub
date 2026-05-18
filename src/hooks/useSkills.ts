@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { allocatePoint, deallocatePoint, getTotalPoints, canAllocate, canDeallocate, defaultAllocation } from '../utils/skills';
 import type { SkillAllocation } from '../utils/skills';
-import { skillNodes } from '../data/skills';
 
 const MAX_TOTAL_POINTS = 91;
 

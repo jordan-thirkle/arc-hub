@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { quickUseItems, getItemsByCategory } from '../data/quickuse';
+import type { QuickUseCategory } from '../types';
 
 interface QuickUseSlotsProps {
   items: (string | null)[];
@@ -9,13 +10,13 @@ interface QuickUseSlotsProps {
 
 export function QuickUseSlots({ items, onSetItem, maxSlots = 5 }: QuickUseSlotsProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
-  const [category, setCategory] = useState<string>('all');
+  const [category, setCategory] = useState<QuickUseCategory | 'all'>('all');
 
-  const categories = ['all', 'Medical', 'Shield', 'Stamina', 'Grenade', 'Utility', 'Trap'] as const;
+  const categories: (QuickUseCategory | 'all')[] = ['all', 'Medical', 'Shield', 'Stamina', 'Grenade', 'Utility', 'Trap'];
 
-  const slotItems = (slot: number) => {
+  const slotItems = () => {
     if (category === 'all') return quickUseItems;
-    return getItemsByCategory(category as any);
+    return getItemsByCategory(category);
   };
 
   return (
@@ -72,7 +73,7 @@ export function QuickUseSlots({ items, onSetItem, maxSlots = 5 }: QuickUseSlotsP
                     >
                       Empty
                     </button>
-                    {slotItems(i).map(q => (
+                    {slotItems().map(q => (
                       <button
                         key={q.id}
                         onClick={() => { onSetItem(i, q.id); setOpenSlot(null); }}

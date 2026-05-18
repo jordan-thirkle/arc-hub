@@ -1,5 +1,6 @@
 import type { MetaBuild, BuildRole, WeaponClass, AmmoType } from '../types';
 import { getWeaponById } from '../data/weapons';
+import type { CommunityBuild } from '../hooks/useCommunityBuilds';
 
 export interface BuildFilters {
   role: BuildRole | 'all';
@@ -10,6 +11,7 @@ export interface BuildFilters {
   minRating: number;
   sortBy: 'rating' | 'votes' | 'newest';
   sortDir: 'desc' | 'asc';
+  source?: 'official' | 'community' | 'all';
 }
 
 export const defaultFilters: BuildFilters = {
@@ -21,6 +23,7 @@ export const defaultFilters: BuildFilters = {
   minRating: 0,
   sortBy: 'rating',
   sortDir: 'desc',
+  source: 'all',
 };
 
 export function filterBuilds(builds: MetaBuild[], filters: BuildFilters): MetaBuild[] {
@@ -61,7 +64,6 @@ export function filterBuilds(builds: MetaBuild[], filters: BuildFilters): MetaBu
     switch (filters.sortBy) {
       case 'rating': cmp = a.rating - b.rating; break;
       case 'votes': cmp = a.votes - b.votes; break;
-      case 'newest': cmp = new Date(a.createdAt ?? 0).getTime() - new Date(b.createdAt ?? 0).getTime(); break;
     }
     return filters.sortDir === 'desc' ? -cmp : cmp;
   });
@@ -75,4 +77,31 @@ export function getUniquePatches(builds: MetaBuild[]): string[] {
 
 export function getUniqueRoles(builds: MetaBuild[]): BuildRole[] {
   return [...new Set(builds.map(b => b.role))];
+}
+
+export function filterCommunityBuilds(builds: CommunityBuild[], filters: BuildFilters): CommunityBuild[] {
+  let result = [...builds];
+
+  if (filters.source === 'official') result = result.filter(b => b.official);
+  else if (filters.source === 'community') result = result.filter(b => !b.official);
+
+  if (filters.role !== 'all') result = result.filter(b => b.role === filters.role);
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    result = result.filter(b =>
+      b.name.toLowerCase().includes(q) ||
+      b.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+
+  result.sort((a, b) => {
+    let cmp = 0;
+    switch (filters.sortBy) {
+      case 'rating': cmp = (a.net_votes ?? 0) - (b.net_votes ?? 0); break;
+      case 'votes': cmp = (a.net_votes ?? 0) - (b.net_votes ?? 0); break;
+    }
+    return filters.sortDir === 'desc' ? -cmp : cmp;
+  });
+
+  return result;
 }

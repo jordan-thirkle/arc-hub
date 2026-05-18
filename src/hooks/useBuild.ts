@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import type { Build, BuildAttachment, WeaponTier } from '../types';
+import type { Build, BuildAttachment, WeaponTier, AttachmentSlot } from '../types';
 
 const DEFAULT_BUILD: Omit<Build, 'id' | 'createdAt'> = {
   name: '',
@@ -13,6 +13,7 @@ const DEFAULT_BUILD: Omit<Build, 'id' | 'createdAt'> = {
 export function useBuild() {
   const [build, setBuild] = useLocalStorage<Build>('ar_build', {
     ...DEFAULT_BUILD,
+    // eslint-disable-next-line react-hooks/purity
     id: crypto.randomUUID?.() ?? Date.now().toString(36),
     createdAt: new Date().toISOString(),
   });
@@ -32,11 +33,11 @@ export function useBuild() {
     setBuild(prev => ({ ...prev, primaryTier: tier }));
   }, [setBuild]);
 
-  const setPrimaryAttachment = useCallback((slot: string, attachmentId: string | null) => {
+  const setPrimaryAttachment = useCallback((slot: AttachmentSlot, attachmentId: string | null) => {
     setBuild(prev => {
       const existing = prev.primaryAttachments.filter(a => a.slot !== slot);
       const updated: BuildAttachment[] = attachmentId
-        ? [...existing, { slot: slot as any, attachmentId }]
+        ? [...existing, { slot, attachmentId }]
         : existing;
       return { ...prev, primaryAttachments: updated };
     });
@@ -51,12 +52,12 @@ export function useBuild() {
     }));
   }, [setBuild]);
 
-  const setSecondaryAttachment = useCallback((slot: string, attachmentId: string | null) => {
+  const setSecondaryAttachment = useCallback((slot: AttachmentSlot, attachmentId: string | null) => {
     setBuild(prev => {
       if (!prev.secondaryWeaponId) return prev;
       const existing = (prev.secondaryAttachments ?? []).filter(a => a.slot !== slot);
       const updated: BuildAttachment[] = attachmentId
-        ? [...existing, { slot: slot as any, attachmentId }]
+        ? [...existing, { slot, attachmentId }]
         : existing;
       return { ...prev, secondaryAttachments: updated };
     });
@@ -89,6 +90,7 @@ export function useBuild() {
   const reset = useCallback(() => {
     setBuild({
       ...DEFAULT_BUILD,
+      // eslint-disable-next-line react-hooks/purity
       id: crypto.randomUUID?.() ?? Date.now().toString(36),
       createdAt: new Date().toISOString(),
     });

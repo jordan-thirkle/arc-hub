@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { augments } from '../data/augments';
-import type { Augment, ShieldName } from '../types';
+import type { ShieldName } from '../types';
 
 interface AugmentSelectProps {
   selectedId: string | undefined;

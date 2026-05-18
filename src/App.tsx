@@ -1,20 +1,26 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { weapons, getWeaponById } from './data/weapons';
-import { attachments, getAttachmentsBySlot } from './data/attachments';
+import { attachments } from './data/attachments';
 import { augments } from './data/augments';
 import { shields } from './data/shields';
 import { quickUseItems } from './data/quickuse';
 import { metaBuilds } from './data/metaBuilds';
 import { craftingRecipes } from './data/crafting';
-import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, TabPanel } from './components';
+import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, WeaponComparison, BuildSubmissionForm, SkillGraphView, AdUnit, GearAffiliate } from './components';
 import { useBuild } from './hooks/useBuild';
 import { useSkills } from './hooks/useSkills';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { useCommunityBuilds } from './hooks/useCommunityBuilds';
+import { useVotes } from './hooks/useVotes';
 import { getBuildFromUrl } from './utils/buildUrl';
-import { filterBuilds, getUniqueRoles } from './utils/filters';
+import { filterBuilds, getUniqueRoles, filterCommunityBuilds } from './utils/filters';
+import { fetchAllWeapons } from './utils/api';
+import { mergeApiWeapons } from './data/weapons';
+import { useLiveData } from './hooks/useLiveData';
 import { calculateMaterialsForItems } from './utils/crafting';
 import { getRecommendedAllocation } from './utils/skills';
+import { patches, latestPatch } from './data/patches';
 import type { Build, WeaponTier, BuildRole } from './types';
 import { AMMO_COLORS, SLOT_LABELS } from './types';
 
@@ -24,7 +30,7 @@ function generateId(): string {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('planner');
-  const { build, setPrimaryWeapon, setPrimaryTier, setPrimaryAttachment, setSecondaryWeapon, setSecondaryAttachment, setAugment, setShield, setQuickUseItem, setName, setNotes, reset } = useBuild();
+  const { build, setPrimaryWeapon, setPrimaryAttachment, setSecondaryWeapon, setSecondaryAttachment, setAugment, setShield, setQuickUseItem, setName, setNotes, reset } = useBuild();
   const { allocation, totalPoints, remainingPoints, addPoint, removePoint, resetSkills } = useSkills();
   const [savedBuilds, setSavedBuilds] = useLocalStorage<Build[]>('ar-saved-builds', []);
 
@@ -32,6 +38,28 @@ export default function App() {
   const [buildRole, setBuildRole] = useState<BuildRole | 'all'>('all');
   const [buildSort, setBuildSort] = useState<'rating' | 'votes'>('rating');
   const [craftQueue, setCraftQueue] = useState<string[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [buildsTab, setBuildsTab] = useState<'meta' | 'community'>('meta');
+  const [communityFilter, setCommunityFilter] = useState<'all' | 'official' | 'community'>('all');
+  const [showSubmissionForm, setShowSubmissionForm] = useState(false);
+  const [skillView, setSkillView] = useState<'list' | 'graph'>('list');
+
+  const { builds: communityBuilds, submitBuild } = useCommunityBuilds();
+  const { userVotes, setVote } = useVotes();
+
+  const { source: dataSource, loading: dataLoading } = useLiveData(
+    async () => {
+      const apiData = await fetchAllWeapons();
+      return mergeApiWeapons(apiData as Record<string, unknown>);
+    },
+    weapons,
+    'ar-live-weapons',
+  );
+
+  const navigateToPatches = useCallback(() => {
+    setActiveTab('database');
+    setDbTab('patches');
+  }, []);
 
   useEffect(() => {
     const fromUrl = getBuildFromUrl();
@@ -46,7 +74,7 @@ export default function App() {
       if (fromUrl.shieldId) setShield(fromUrl.shieldId);
       fromUrl.quickUseItems.forEach((id, i) => setQuickUseItem(i, id));
     }
-  }, []);
+  }, [setPrimaryWeapon, setPrimaryAttachment, setSecondaryWeapon, setSecondaryAttachment, setAugment, setShield, setQuickUseItem]);
 
   const primaryWeapon = getWeaponById(build.primaryWeaponId);
   const secondaryWeapon = build.secondaryWeaponId ? getWeaponById(build.secondaryWeaponId) : undefined;
@@ -54,7 +82,7 @@ export default function App() {
   const selectedShield = build.shieldId ? shields.find(s => s.id === build.shieldId) : undefined;
 
   const handleSave = useCallback((name: string) => {
-    const newBuild: Build = { id: generateId(), createdAt: new Date().toISOString(), ...build, name };
+    const newBuild: Build = { ...build, id: generateId(), createdAt: new Date().toISOString(), name };
     setSavedBuilds(prev => [newBuild, ...prev]);
   }, [build, setSavedBuilds]);
 
@@ -111,7 +139,17 @@ export default function App() {
                 <p className="text-xs text-secondary max-w-xl mx-auto">
                   Build the perfect loadout for the Topside. Select weapons, attachments, augments, and shields.
                 </p>
+                <button id="toggle-compare" onClick={() => setShowComparison(p => !p)}
+                  className="mt-2 px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border transition-all mx-auto block ${
+                    showComparison ? 'bg-accent text-page border-accent' : 'border-[rgb(var(--border-primary))] text-tertiary hover:text-primary'
+                  }">
+                  {showComparison ? 'Close Comparison' : 'Compare Weapons'}
+                </button>
               </div>
+
+              {showComparison && (
+                <WeaponComparison />
+              )}
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-1 space-y-4">
@@ -153,6 +191,7 @@ export default function App() {
                             <p className="text-[9px] text-tertiary">Annual Cost: <span className="text-accent font-mono">
                               {primaryWeapon.tiers[build.primaryTier]?.value.toLocaleString() || '?'}c
                             </span></p>
+                            <p className="text-[9px] text-tertiary">Patch: <button onClick={navigateToPatches} className="text-accent underline hover:no-underline font-mono">{latestPatch.version}</button></p>
                           </div>
                         </div>
                       </div>
@@ -182,54 +221,148 @@ export default function App() {
           {/* ── BUILDS TAB ── */}
           {activeTab === 'builds' && (
             <div className="space-y-4">
-              <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Meta Builds</h2>
-              <div className="flex flex-wrap gap-2 items-center">
-                <select value={buildRole} onChange={e => setBuildRole(e.target.value as BuildRole | 'all')}
-                  className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
-                  <option value="all">All Roles</option>
-                  {getUniqueRoles(metaBuilds).map(r => <option key={r} value={r}>{r}</option>)}
-                </select>
-                <select value={buildSort} onChange={e => setBuildSort(e.target.value as 'rating' | 'votes')}
-                  className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
-                  <option value="rating">Sort: Rating</option>
-                  <option value="votes">Sort: Popular</option>
-                </select>
-                <span className="text-[9px] text-tertiary font-mono">{filteredBuilds.length} builds</span>
+              <div className="flex gap-0 border-b border-[rgb(var(--border-primary))]" role="tablist">
+                {[
+                  { id: 'meta', label: 'Meta Builds' },
+                  { id: 'community', label: 'Community' },
+                ].map(tab => (
+                  <button key={tab.id} onClick={() => setBuildsTab(tab.id as 'meta' | 'community')}
+                    className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all ${
+                      buildsTab === tab.id ? 'text-accent border-accent' : 'text-tertiary border-transparent hover:text-primary'
+                    }`} role="tab" aria-selected={buildsTab === tab.id}>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {filteredBuilds.map(mb => {
-                  const w = getWeaponById(mb.build.primaryWeaponId);
-                  const tierLabel = ['I','II','III','IV'][mb.build.primaryTier] ?? 'I';
-                  return (
-                    <div key={mb.id} className="border border-[rgb(var(--border-primary))] bg-surface p-3 hover:border-tertiary transition-all">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-xs font-semibold text-primary truncate">{mb.name}</h3>
-                          <p className="text-[8px] font-mono text-tertiary uppercase">{mb.role} &middot; {mb.patch}</p>
+              {buildsTab === 'meta' && (
+                <>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <select value={buildRole} onChange={e => setBuildRole(e.target.value as BuildRole | 'all')}
+                      className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
+                      <option value="all">All Roles</option>
+                      {getUniqueRoles(metaBuilds).map(r => <option key={r} value={r}>{r}</option>)}
+                    </select>
+                    <select value={buildSort} onChange={e => setBuildSort(e.target.value as 'rating' | 'votes')}
+                      className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
+                      <option value="rating">Sort: Rating</option>
+                      <option value="votes">Sort: Popular</option>
+                    </select>
+                    <span className="text-[9px] text-tertiary font-mono">{filteredBuilds.length} builds</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {filteredBuilds.map(mb => {
+                      const w = getWeaponById(mb.build.primaryWeaponId);
+                      const tierLabel = ['I','II','III','IV'][mb.build.primaryTier] ?? 'I';
+                      return (
+                        <div key={mb.id} className="border border-[rgb(var(--border-primary))] bg-surface p-3 hover:border-tertiary transition-all">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-xs font-semibold text-primary truncate">{mb.name}</h3>
+                              <p className="text-[8px] font-mono text-tertiary uppercase">{mb.role} &middot; {mb.patch}</p>
+                            </div>
+                            <div className="text-right ml-2">
+                              <p className="text-xs font-mono text-accent">{mb.rating.toFixed(1)}</p>
+                              <p className="text-[8px] text-tertiary">{mb.votes} votes</p>
+                            </div>
+                          </div>
+                          <p className="text-[9px] text-secondary mb-2 line-clamp-2">{mb.description}</p>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {w && (
+                              <span className="text-[8px] px-1.5 py-0.5 font-mono" style={{
+                                backgroundColor: AMMO_COLORS[w.ammoType] + '22',
+                                color: AMMO_COLORS[w.ammoType],
+                                border: `1px solid ${AMMO_COLORS[w.ammoType]}44`,
+                              }}>{w.name} T{tierLabel}</span>
+                            )}
+                            {mb.tags.slice(0, 3).map(t => (
+                              <span key={t} className="text-[7px] px-1 py-0.5 border border-[rgb(var(--border-primary))] text-tertiary font-mono uppercase">{t}</span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="text-right ml-2">
-                          <p className="text-xs font-mono text-accent">{mb.rating.toFixed(1)}</p>
-                          <p className="text-[8px] text-tertiary">{mb.votes} votes</p>
-                        </div>
-                      </div>
-                      <p className="text-[9px] text-secondary mb-2 line-clamp-2">{mb.description}</p>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {w && (
-                          <span className="text-[8px] px-1.5 py-0.5 font-mono" style={{
-                            backgroundColor: AMMO_COLORS[w.ammoType] + '22',
-                            color: AMMO_COLORS[w.ammoType],
-                            border: `1px solid ${AMMO_COLORS[w.ammoType]}44`,
-                          }}>{w.name} T{tierLabel}</span>
-                        )}
-                        {mb.tags.slice(0, 3).map(t => (
-                          <span key={t} className="text-[7px] px-1 py-0.5 border border-[rgb(var(--border-primary))] text-tertiary font-mono uppercase">{t}</span>
-                        ))}
-                      </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
+              {buildsTab === 'community' && (
+                <>
+                  <div className="flex flex-wrap gap-2 items-center justify-between">
+                    <div className="flex gap-2 items-center">
+                      <select value={communityFilter} onChange={e => setCommunityFilter(e.target.value as 'all' | 'official' | 'community')}
+                        className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
+                        <option value="all">All Builds</option>
+                        <option value="official">Official Only</option>
+                        <option value="community">Community Only</option>
+                      </select>
+                      <select value={buildSort} onChange={e => setBuildSort(e.target.value as 'rating' | 'votes')}
+                        className="px-2 py-1.5 text-[10px] bg-surface border border-[rgb(var(--border-primary))] text-primary focus:outline-none focus:border-accent">
+                        <option value="votes">Sort: Popular</option>
+                        <option value="rating">Sort: Rating</option>
+                      </select>
+                      <span className="text-[9px] text-tertiary font-mono">{filterCommunityBuilds(communityBuilds, { role: buildRole, weaponClass: 'all', ammoType: 'all', patch: 'all', search: '', minRating: 0, sortBy: buildSort, sortDir: 'desc', source: communityFilter }).length} builds</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <button onClick={() => setShowSubmissionForm(true)}
+                      className="px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border border-[rgb(var(--border-primary))] text-accent hover:bg-accent/10 transition-all">
+                      + Submit Build
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {filterCommunityBuilds(communityBuilds, { role: buildRole, weaponClass: 'all', ammoType: 'all', patch: 'all', search: '', minRating: 0, sortBy: buildSort, sortDir: 'desc', source: communityFilter }).map(cb => {
+                      const buildData = cb.build_json as { primaryWeaponId?: string; primaryTier?: number };
+                      const w = buildData.primaryWeaponId ? getWeaponById(buildData.primaryWeaponId) : null;
+                      const tierLabel = ['I','II','III','IV'][buildData.primaryTier ?? 0] ?? 'I';
+                      const userVote = userVotes[cb.id] ?? null;
+                      return (
+                        <div key={cb.id} className="border border-[rgb(var(--border-primary))] bg-surface p-3 hover:border-tertiary transition-all">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <h3 className="text-xs font-semibold text-primary truncate">{cb.name}</h3>
+                                {cb.official && <span className="text-[7px] px-1 py-0.5 bg-accent/20 text-accent font-mono uppercase">Official</span>}
+                              </div>
+                              <p className="text-[8px] font-mono text-tertiary uppercase">{cb.role} &middot; by {cb.author_username}</p>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2">
+                              <button onClick={() => setVote(cb.id, userVote === 1 ? null : 1)}
+                                className={`px-1.5 py-1 text-[9px] font-mono border transition-all ${
+                                  userVote === 1 ? 'bg-accent text-page border-accent' : 'border-[rgb(var(--border-primary))] text-tertiary hover:text-primary'
+                                }`} title="Upvote">&uarr;</button>
+                              <span className="text-[10px] font-mono text-accent min-w-[2ch] text-center">{cb.net_votes}</span>
+                              <button onClick={() => setVote(cb.id, userVote === -1 ? null : -1)}
+                                className={`px-1.5 py-1 text-[9px] font-mono border transition-all ${
+                                  userVote === -1 ? 'bg-danger text-page border-danger' : 'border-[rgb(var(--border-primary))] text-tertiary hover:text-primary'
+                                }`} title="Downvote">&darr;</button>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {w && (
+                              <span className="text-[8px] px-1.5 py-0.5 font-mono" style={{
+                                backgroundColor: AMMO_COLORS[w.ammoType] + '22',
+                                color: AMMO_COLORS[w.ammoType],
+                                border: `1px solid ${AMMO_COLORS[w.ammoType]}44`,
+                              }}>{w.name} T{tierLabel}</span>
+                            )}
+                            {cb.tags.slice(0, 3).map(t => (
+                              <span key={t} className="text-[7px] px-1 py-0.5 border border-[rgb(var(--border-primary))] text-tertiary font-mono uppercase">{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {filterCommunityBuilds(communityBuilds, { role: buildRole, weaponClass: 'all', ammoType: 'all', patch: 'all', search: '', minRating: 0, sortBy: buildSort, sortDir: 'desc', source: communityFilter }).length === 0 && (
+                    <div className="text-center py-8 border border-dashed border-[rgb(var(--border-primary))] bg-surface">
+                      <p className="text-xs text-tertiary font-mono uppercase tracking-[0.1em]">No builds found</p>
+                      <p className="text-[9px] text-tertiary mt-1">Be the first to submit a build!</p>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
 
@@ -242,6 +375,7 @@ export default function App() {
                   { id: 'weapons', label: 'Weapons', badge: weapons.length },
                   { id: 'attachments', label: 'Attachments', badge: attachments.length },
                   { id: 'items', label: 'Items', badge: quickUseItems.length },
+                  { id: 'patches', label: 'Patches', badge: patches.length },
                 ].map(tab => (
                   <button key={tab.id} onClick={() => setDbTab(tab.id)}
                     className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all ${
@@ -253,107 +387,121 @@ export default function App() {
                 ))}
               </div>
 
-              {dbTab === 'weapons' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-[10px] font-mono">
-                    <thead>
-                      <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
-                        <th className="text-left py-2 pr-2">Name</th>
-                        <th className="text-left py-2 pr-2">Class</th>
-                        <th className="text-left py-2 pr-2">Ammo</th>
-                        <th className="text-left py-2 pr-2">Mode</th>
-                        <th className="text-right py-2 pr-2">DMG</th>
-                        <th className="text-right py-2 pr-2">FR</th>
-                        <th className="text-right py-2 pr-2">Range</th>
-                        <th className="text-right py-2 pr-2">Mag</th>
-                        <th className="text-right py-2">Value</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {weapons.map(w => {
-                        const base = w.tiers[0]?.stats;
-                        return (
-                          <tr key={w.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
-                            <td className="py-1.5 pr-2 text-primary font-semibold">{w.name}</td>
-                            <td className="py-1.5 pr-2 text-tertiary">{w.class}</td>
-                            <td className="py-1.5 pr-2"><span style={{ color: AMMO_COLORS[w.ammoType] }}>{w.ammoType}</span></td>
-                            <td className="py-1.5 pr-2 text-tertiary">{w.firingMode}</td>
-                            <td className="py-1.5 pr-2 text-right">{base?.damage ?? '-'}</td>
-                            <td className="py-1.5 pr-2 text-right">{base?.fireRate ?? '-'}</td>
-                            <td className="py-1.5 pr-2 text-right">{base?.range ?? '-'}</td>
-                            <td className="py-1.5 pr-2 text-right">{base?.magSize ?? '-'}</td>
-                            <td className="py-1.5 text-right text-accent">{w.tiers[0]?.value.toLocaleString() || '-'}c</td>
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_180px] gap-4">
+                <div className="space-y-4">
+
+                  {dbTab === 'weapons' && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-[10px] font-mono">
+                        <thead>
+                          <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
+                            <th className="text-left py-2 pr-2">Name</th>
+                            <th className="text-left py-2 pr-2">Class</th>
+                            <th className="text-left py-2 pr-2">Ammo</th>
+                            <th className="text-left py-2 pr-2">Mode</th>
+                            <th className="text-right py-2 pr-2">DMG</th>
+                            <th className="text-right py-2 pr-2">FR</th>
+                            <th className="text-right py-2 pr-2">Range</th>
+                            <th className="text-right py-2 pr-2">Mag</th>
+                            <th className="text-right py-2">Value</th>
                           </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                        </thead>
+                        <tbody>
+                          {weapons.map(w => {
+                            const base = w.tiers[0]?.stats;
+                            return (
+                              <tr key={w.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
+                                <td className="py-1.5 pr-2 text-primary font-semibold">{w.name}</td>
+                                <td className="py-1.5 pr-2 text-tertiary">{w.class}</td>
+                                <td className="py-1.5 pr-2"><span style={{ color: AMMO_COLORS[w.ammoType] }}>{w.ammoType}</span></td>
+                                <td className="py-1.5 pr-2 text-tertiary">{w.firingMode}</td>
+                                <td className="py-1.5 pr-2 text-right">{base?.damage ?? '-'}</td>
+                                <td className="py-1.5 pr-2 text-right">{base?.fireRate ?? '-'}</td>
+                                <td className="py-1.5 pr-2 text-right">{base?.range ?? '-'}</td>
+                                <td className="py-1.5 pr-2 text-right">{base?.magSize ?? '-'}</td>
+                                <td className="py-1.5 text-right text-accent">{w.tiers[0]?.value.toLocaleString() || '-'}c</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
 
-              {dbTab === 'attachments' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-[10px] font-mono">
-                    <thead>
-                      <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
-                        <th className="text-left py-2 pr-2">Slot</th>
-                        <th className="text-left py-2 pr-2">Name</th>
-                        <th className="text-center py-2 pr-2">Tier</th>
-                        <th className="text-left py-2 pr-2">Effects</th>
-                        <th className="text-left py-2">Penalties</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {attachments.map(a => (
-                        <tr key={a.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
-                          <td className="py-1.5 pr-2 text-tertiary">{SLOT_LABELS[a.slot]}</td>
-                          <td className="py-1.5 pr-2 text-primary font-semibold">{a.name}</td>
-                          <td className="py-1.5 pr-2 text-center font-mono">T{a.tier}</td>
-                          <td className="py-1.5 pr-2 text-accent text-[9px]">
-                            {Object.entries(a.effects).map(([k, v]) => `${k.replace(/([A-Z])/g, ' $1').trim()}: ${v > 0 ? '+' : ''}${v}`).join(', ')}
-                          </td>
-                          <td className="py-1.5 text-danger text-[9px]">
-                            {a.penalties ? Object.entries(a.penalties).map(([k, v]) => `${k.replace(/([A-Z])/g, ' $1').trim()}: ${v > 0 ? '+' : ''}${v}`).join(', ') : '—'}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                  {dbTab === 'attachments' && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-[10px] font-mono">
+                        <thead>
+                          <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
+                            <th className="text-left py-2 pr-2">Slot</th>
+                            <th className="text-left py-2 pr-2">Name</th>
+                            <th className="text-center py-2 pr-2">Tier</th>
+                            <th className="text-left py-2 pr-2">Effects</th>
+                            <th className="text-left py-2">Penalties</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {attachments.map(a => (
+                            <tr key={a.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
+                              <td className="py-1.5 pr-2 text-tertiary">{SLOT_LABELS[a.slot]}</td>
+                              <td className="py-1.5 pr-2 text-primary font-semibold">{a.name}</td>
+                              <td className="py-1.5 pr-2 text-center font-mono">T{a.tier}</td>
+                              <td className="py-1.5 pr-2 text-accent text-[9px]">
+                                {Object.entries(a.effects).map(([k, v]) => `${k.replace(/([A-Z])/g, ' $1').trim()}: ${v > 0 ? '+' : ''}${v}`).join(', ')}
+                              </td>
+                              <td className="py-1.5 text-danger text-[9px]">
+                                {a.penalties ? Object.entries(a.penalties).map(([k, v]) => `${k.replace(/([A-Z])/g, ' $1').trim()}: ${v > 0 ? '+' : ''}${v}`).join(', ') : '—'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
 
-              {dbTab === 'items' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-[10px] font-mono">
-                    <thead>
-                      <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
-                        <th className="text-left py-2 pr-2">Category</th>
-                        <th className="text-left py-2 pr-2">Name</th>
-                        <th className="text-center py-2 pr-2">Rarity</th>
-                        <th className="text-right py-2 pr-2">Weight</th>
-                        <th className="text-left py-2">Effect</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {quickUseItems.map(item => (
-                        <tr key={item.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
-                          <td className="py-1.5 pr-2 text-tertiary">{item.category}</td>
-                          <td className="py-1.5 pr-2 text-primary font-semibold">{item.name}</td>
-                          <td className="py-1.5 pr-2 text-center">
-                            <span className={`text-[8px] px-1 py-0.5 ${
-                              item.rarity === 'Legendary' ? 'text-orange-400' :
-                              item.rarity === 'Rare' ? 'text-blue-400' :
-                              item.rarity === 'Uncommon' ? 'text-green-400' : 'text-tertiary'
-                            }`}>{item.rarity}</span>
-                          </td>
-                          <td className="py-1.5 pr-2 text-right font-mono">{item.weight}kg</td>
-                          <td className="py-1.5 text-secondary text-[9px]">{item.effect}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  {dbTab === 'items' && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-[10px] font-mono">
+                        <thead>
+                          <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
+                            <th className="text-left py-2 pr-2">Category</th>
+                            <th className="text-left py-2 pr-2">Name</th>
+                            <th className="text-center py-2 pr-2">Rarity</th>
+                            <th className="text-right py-2 pr-2">Weight</th>
+                            <th className="text-left py-2">Effect</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {quickUseItems.map(item => (
+                            <tr key={item.id} className="border-b border-[rgb(var(--border-primary))] hover:bg-[rgb(var(--bg-elevated))]">
+                              <td className="py-1.5 pr-2 text-tertiary">{item.category}</td>
+                              <td className="py-1.5 pr-2 text-primary font-semibold">{item.name}</td>
+                              <td className="py-1.5 pr-2 text-center">
+                                <span className={`text-[8px] px-1 py-0.5 ${
+                                  item.rarity === 'Legendary' ? 'text-orange-400' :
+                                  item.rarity === 'Rare' ? 'text-blue-400' :
+                                  item.rarity === 'Uncommon' ? 'text-green-400' : 'text-tertiary'
+                                }`}>{item.rarity}</span>
+                              </td>
+                              <td className="py-1.5 pr-2 text-right font-mono">{item.weight}kg</td>
+                              <td className="py-1.5 text-secondary text-[9px]">{item.effect}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {dbTab === 'patches' && (
+                    <PatchNotes />
+                  )}
                 </div>
-              )}
+
+                <div className="hidden lg:block space-y-4">
+                  <AdUnit slot="arc-database" type="carbon" />
+                  <GearAffiliate />
+                </div>
+              </div>
             </div>
           )}
 
@@ -362,7 +510,21 @@ export default function App() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Skill Tree</h2>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-0 border border-[rgb(var(--border-primary))]">
+                    <button onClick={() => setSkillView('list')}
+                      className={`px-2 py-1 text-[8px] font-mono uppercase tracking-[0.1em] transition-all ${
+                        skillView === 'list' ? 'bg-accent text-page' : 'text-tertiary hover:text-primary'
+                      }`}>
+                      List
+                    </button>
+                    <button onClick={() => setSkillView('graph')}
+                      className={`px-2 py-1 text-[8px] font-mono uppercase tracking-[0.1em] transition-all ${
+                        skillView === 'graph' ? 'bg-accent text-page' : 'text-tertiary hover:text-primary'
+                      }`}>
+                      Graph
+                    </button>
+                  </div>
                   <button onClick={() => {
                     const rec = getRecommendedAllocation();
                     for (const [id, pts] of Object.entries(rec)) {
@@ -377,9 +539,15 @@ export default function App() {
                   </button>
                 </div>
               </div>
-              <SkillTreeViewer
-                allocation={allocation} totalPoints={totalPoints}
-                remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
+              {skillView === 'list' ? (
+                <SkillTreeViewer
+                  allocation={allocation} totalPoints={totalPoints}
+                  remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
+              ) : (
+                <SkillGraphView
+                  allocation={allocation} totalPoints={totalPoints}
+                  remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
+              )}
             </div>
           )}
 
@@ -461,14 +629,47 @@ export default function App() {
         </main>
 
         <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-8 border-t border-[rgb(var(--border-primary))] text-center">
+          <div className="max-w-lg mx-auto mb-4">
+            <AdUnit slot="arc-footer" type="carbon" />
+          </div>
           <p className="text-[9px] text-tertiary font-mono uppercase tracking-[0.1em]">
             ARC Raiders Loadout Planner — Community tool. Not affiliated with Embark Studios.
           </p>
           <p className="text-[8px] text-tertiary mt-1">
             Game data by <a href="https://metaforge.app/arc-raiders" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">MetaForge</a>. Stats approximate, may change with updates.
           </p>
+          <div className="flex items-center justify-center gap-3 mt-3">
+            <a href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-mono border border-[rgb(var(--border-primary))] text-tertiary hover:text-primary hover:border-tertiary transition-all">
+              <span>&#9749;</span> Support on Ko-fi
+            </a>
+          </div>
+          <p className="text-[7px] font-mono mt-2 inline-flex items-center gap-1.5">
+            <span className={`w-1.5 h-1.5 rounded-full inline-block ${
+              dataSource === 'live' ? 'bg-green-400' : dataSource === 'cached' ? 'bg-amber-400' : 'bg-gray-500'
+            }`} />
+            <span className="text-tertiary">
+              Data: {dataSource === 'live' ? 'Live' : dataSource === 'cached' ? 'Cached' : 'Static'}
+              {dataLoading && ' (refreshing...)'}
+            </span>
+          </p>
         </footer>
       </div>
+
+      {showSubmissionForm && (
+        <BuildSubmissionForm
+          currentBuild={{
+            primaryWeaponId: build.primaryWeaponId,
+            primaryTier: build.primaryTier,
+            name: build.name,
+          }}
+          onSubmit={async (data) => {
+            await submitBuild(data);
+            setShowSubmissionForm(false);
+          }}
+          onClose={() => setShowSubmissionForm(false)}
+        />
+      )}
     </>
   );
 }

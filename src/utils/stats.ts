@@ -1,5 +1,5 @@
 import { getAttachmentById } from '../data/attachments';
-import type { Weapon, WeaponStat, AttachmentSlot, BuildAttachment } from '../types';
+import type { Weapon, WeaponStat, BuildAttachment } from '../types';
 
 export function calculateStats(weapon: Weapon, tier: number, attachments: BuildAttachment[]): WeaponStat {
   const base = weapon.tiers[tier];

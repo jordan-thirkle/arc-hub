@@ -9,7 +9,7 @@ export function getTotalPoints(allocation: SkillAllocation): number {
 
 export function getAllocatedNodes(allocation: SkillAllocation): SkillNode[] {
   return Object.entries(allocation)
-    .filter(([_, pts]) => pts > 0)
+    .filter(([, pts]) => pts > 0)
     .map(([id]) => getSkillNodeById(id))
     .filter(Boolean) as SkillNode[];
 }
@@ -20,7 +20,7 @@ export function getPointsInBranch(allocation: SkillAllocation, branch: SkillBran
       const node = getSkillNodeById(id);
       return node?.branch === branch;
     })
-    .reduce((sum, [_, pts]) => sum + pts, 0);
+    .reduce((sum, [, pts]) => sum + pts, 0);
 }
 
 export function canAllocate(nodeId: string, allocation: SkillAllocation): { allowed: boolean; reason?: string } {

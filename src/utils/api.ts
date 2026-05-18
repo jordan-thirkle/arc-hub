@@ -1,3 +1,5 @@
+import { mockFetchWeaponStats, mockFetchLatestPatch } from './api-mock';
+
 const BASE_URL = 'https://api.metaforge.app/v1';
 const CACHE_PREFIX = 'mf_cache_';
 const CACHE_TTL = 5 * 60 * 1000;
@@ -31,7 +33,11 @@ function setCache<T>(key: string, data: T): void {
   } catch { /* storage full — ignore */ }
 }
 
-export async function fetchApi<T>(endpoint: string, options?: { ttl?: number }): Promise<T> {
+function shouldUseMock(): boolean {
+  return import.meta.env.VITE_USE_MOCK_API === 'true';
+}
+
+export async function fetchApi<T = unknown>(endpoint: string): Promise<T> {
   const cacheKey = getCacheKey(endpoint);
   const cached = getFromCache<T>(cacheKey);
   if (cached) return cached;
@@ -44,16 +50,26 @@ export async function fetchApi<T>(endpoint: string, options?: { ttl?: number }):
   return data;
 }
 
-export async function fetchWeaponStats(weaponId: string): Promise<any> {
+export async function fetchWeaponStats(weaponId: string): Promise<Record<string, unknown>> {
   return fetchApi(`/weapons/${weaponId}/stats`);
 }
 
-export async function fetchPatches(): Promise<any> {
+export async function fetchAllWeapons(): Promise<Record<string, unknown>> {
+  if (shouldUseMock()) return mockFetchWeaponStats();
+  return fetchApi('/weapons');
+}
+
+export async function fetchAttachmentsData(): Promise<Record<string, unknown>> {
+  return fetchApi('/attachments');
+}
+
+export async function fetchPatches(): Promise<Record<string, unknown>> {
+  if (shouldUseMock()) return mockFetchLatestPatch();
   return fetchApi('/patches');
 }
 
-export async function fetchLeaderboards(): Promise<any> {
-  return fetchApi('/leaderboards/meta-builds', { ttl: 60 * 1000 });
+export async function fetchLeaderboards(): Promise<Record<string, unknown>> {
+  return fetchApi('/leaderboards/meta-builds');
 }
 
 export function clearCache(): void {

@@ -13,7 +13,7 @@ interface AttachmentSlotsProps {
 
 export function AttachmentSlots({ weaponId, slots, attachments: current, onEquip, label = 'Attachments' }: AttachmentSlotsProps) {
   const [openSlot, setOpenSlot] = useState<AttachmentSlot | null>(null);
-
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setOpenSlot(null); }, [weaponId]);
 
   if (slots.length === 0) {

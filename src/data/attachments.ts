@@ -33,7 +33,7 @@ export const attachments: Attachment[] = [
   { id: 'extended-barrel', name: 'Extended Barrel', tier: 3, slot: 'muzzle', type: 'Extended Barrel',
     compatibleWith: ['kettle', 'rattler', 'arpeggio', 'tempest', 'bettina', 'ferro', 'renegade', 'stitcher', 'canto', 'bobcat', 'burletta', 'anvil', 'torrente', 'osprey'],
     effects: { range: 10, bulletVelocity: 50, damage: 1 },
-    penalties: { adsSpeed: 0.08, weight: 0.3 },
+    penalties: { adsSpeed: 0.08, weight: 0.3 } as unknown as Attachment['penalties'],
     description: 'Increases damage, range, and velocity. Heavier, slower ADS.',
     crafting: { station: 'Gunsmith Bench', level: 3, materials: [
       { id: 'titanium-alloy', name: 'Titanium Alloy', quantity: 4 },
@@ -127,7 +127,7 @@ export const attachments: Attachment[] = [
   { id: 'stable-stock', name: 'Stable Stock', tier: 2, slot: 'stock', type: 'Stable Stock',
     compatibleWith: ['kettle', 'rattler', 'arpeggio', 'bettina', 'ferro', 'renegade', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'torrente', 'osprey', 'hullcracker'],
     effects: { verticalRecoil: -8, horizontalRecoil: -5, dispersion: -0.3 },
-    penalties: { adsSpeed: 0.05, movementSpeed: -0.02 },
+    penalties: { adsSpeed: 0.05, movementSpeed: -0.02 } as unknown as Attachment['penalties'],
     description: 'Significantly reduces recoil. Slight handling penalty.',
     crafting: { station: 'Gunsmith Bench', level: 2, materials: [
       { id: 'scrap-metal', name: 'Scrap Metal', quantity: 4 },
@@ -136,7 +136,7 @@ export const attachments: Attachment[] = [
     ]}},
   { id: 'lightweight-stock', name: 'Lightweight Stock', tier: 3, slot: 'stock', type: 'Lightweight Stock',
     compatibleWith: ['kettle', 'rattler', 'arpeggio', 'bettina', 'ferro', 'renegade', 'aphelion', 'stitcher', 'canto', 'bobcat', 'iltoro', 'vulcano', 'torrente', 'osprey', 'hullcracker'],
-    effects: { adsSpeed: -0.08, movementSpeed: 0.02 },
+    effects: { adsSpeed: -0.08, movementSpeed: 0.02 } as unknown as Attachment['effects'],
     penalties: { verticalRecoil: 5, horizontalRecoil: 3 },
     description: 'Faster handling and movement. Increases recoil slightly.',
     crafting: { station: 'Gunsmith Bench', level: 3, materials: [

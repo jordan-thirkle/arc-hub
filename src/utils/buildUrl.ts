@@ -1,4 +1,4 @@
-import type { Build } from '../types';
+import type { Build, WeaponTier, AttachmentSlot } from '../types';
 
 interface URLData {
   v: 2;
@@ -38,10 +38,10 @@ export function decodeBuild(hash: string): (Omit<Build, 'id' | 'createdAt'>) | n
     if (!data.w || data.v !== 2) return null;
     return {
       name: '',
-      primaryWeaponId: data.w, primaryTier: data.wt ?? 0,
-      primaryAttachments: (data.wa ?? []).map(([slot, id]) => ({ slot: slot as any, attachmentId: id })),
-      secondaryWeaponId: data.s, secondaryTier: data.st,
-      secondaryAttachments: (data.sa ?? []).map(([slot, id]) => ({ slot: slot as any, attachmentId: id })),
+      primaryWeaponId: data.w, primaryTier: (data.wt ?? 0) as WeaponTier,
+      primaryAttachments: (data.wa ?? []).map(([slot, id]) => ({ slot: slot as AttachmentSlot, attachmentId: id })),
+      secondaryWeaponId: data.s, secondaryTier: data.st as WeaponTier | undefined,
+      secondaryAttachments: (data.sa ?? []).map(([slot, id]) => ({ slot: slot as AttachmentSlot, attachmentId: id })),
       augmentId: data.a, shieldId: data.sh,
       quickUseItems: data.q ?? [],
       notes: '',

@@ -241,3 +241,29 @@ export function getWeaponById(id: string): Weapon | undefined {
 export function getWeaponsByClass(className: WeaponClass): Weapon[] {
   return weapons.filter(w => w.class === className);
 }
+
+export function mergeApiWeapons(apiData: Record<string, unknown>): Weapon[] {
+  return weapons.map(w => {
+    const apiW = apiData[w.id] as Record<string, unknown> | undefined;
+    if (!apiW) return w;
+    const apiTiers = apiW.tiers as Array<Record<string, unknown>> | undefined;
+    if (!apiTiers) return w;
+    return {
+      ...w,
+      tiers: w.tiers.map((t, i) => {
+        const apiT = apiTiers[i];
+        if (!apiT || !apiT.stats) return t;
+        const apiStats = apiT.stats as Record<string, number>;
+        return {
+          ...t,
+          stats: {
+            ...t.stats,
+            ...Object.fromEntries(
+              Object.entries(apiStats).filter(([, v]) => typeof v === 'number')
+            ),
+          },
+        };
+      }),
+    };
+  });
+}

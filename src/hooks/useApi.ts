@@ -7,7 +7,7 @@ interface UseApiResult<T> {
   refetch: () => void;
 }
 
-export function useApi<T>(fetcher: () => Promise<T>, deps: any[] = []): UseApiResult<T> {
+export function useApi<T>(fetcher: () => Promise<T>): UseApiResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +24,11 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: any[] = []): UseApiRe
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, deps);
+  }, [fetcher]);
 
   useEffect(() => {
     mountedRef.current = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetch();
     return () => { mountedRef.current = false; };
   }, [fetch]);
