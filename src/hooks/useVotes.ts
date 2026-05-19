@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
+import { getSupabase } from '../lib/supabase';
 
 type VoteValue = 1 | -1 | null;
 
@@ -14,18 +14,19 @@ export function useVotes(): UseVotesResult {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!import.meta.env.VITE_SUPABASE_URL) return;
+    const sb = getSupabase();
+    if (!sb) return;
 
     const initVotes = async () => {
       setLoading(true);
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await sb.auth.getUser();
         if (!user) {
-          const { data } = await supabase.auth.signInAnonymously();
+          const { data } = await sb.auth.signInAnonymously();
           if (!data.user) return;
         }
 
-        const { data: votes } = await supabase
+        const { data: votes } = await sb
           .from('votes')
           .select('build_id, vote_value');
 
@@ -51,16 +52,17 @@ export function useVotes(): UseVotesResult {
 
     setUserVotes(prevVotes => ({ ...prevVotes, [buildId]: value }));
 
-    if (!import.meta.env.VITE_SUPABASE_URL) return;
+    const sb = getSupabase();
+    if (!sb) return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await sb.auth.getUser();
       if (!user) return;
 
       if (value === null) {
-        await supabase.from('votes').delete().match({ build_id: buildId, user_id: user.id });
+        await sb.from('votes').delete().match({ build_id: buildId, user_id: user.id });
       } else {
-        await supabase.from('votes').upsert(
+        await sb.from('votes').upsert(
           { build_id: buildId, user_id: user.id, vote_value: value },
           { onConflict: 'build_id, user_id' }
         );

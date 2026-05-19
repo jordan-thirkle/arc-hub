@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '../lib/supabase';
+import { getSupabase } from '../lib/supabase';
 import { metaBuilds } from '../data/metaBuilds';
 import { useLocalStorage } from './useLocalStorage';
 
@@ -46,14 +46,15 @@ export function useCommunityBuilds(): UseCommunityBuildsResult {
   const mountedRef = useRef(true);
 
   const fetchBuilds = useCallback(async () => {
-    if (!import.meta.env.VITE_SUPABASE_URL) {
+    const sb = getSupabase();
+    if (!sb) {
       setLoading(false);
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      const { data, error: err } = await supabase
+      const { data, error: err } = await sb
         .from('community_builds')
         .select('*')
         .order('net_votes', { ascending: false });
@@ -91,7 +92,8 @@ export function useCommunityBuilds(): UseCommunityBuildsResult {
   }, [fetchBuilds]);
 
   const submitBuild = useCallback(async (data: Omit<CommunityBuild, 'id' | 'net_votes' | 'official' | 'created_at'>) => {
-    if (!import.meta.env.VITE_SUPABASE_URL) {
+    const sb = getSupabase();
+    if (!sb) {
       const localBuild: CommunityBuild = {
         ...data,
         id: Date.now().toString(36),
@@ -103,7 +105,7 @@ export function useCommunityBuilds(): UseCommunityBuildsResult {
       return;
     }
     try {
-      const { error: err } = await supabase.from('community_builds').insert({
+      const { error: err } = await sb.from('community_builds').insert({
         name: data.name,
         build_json: data.build_json,
         role: data.role,
