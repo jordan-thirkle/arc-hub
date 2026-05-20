@@ -14,18 +14,17 @@ const tabs = [
 
 export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) {
   return (
-    <header className="border-b border-[rgb(var(--border-primary))]">
+    <header className="border-b border-[rgb(var(--border-primary))] bg-page/80 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center justify-between py-2.5">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 bg-accent flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 text-[rgb(var(--bg-page))]" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-            </div>
+            <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-label="Logo mark" className="flex-shrink-0">
+              <polygon points="24,6 40,15 40,33 24,42 8,33 8,15" stroke="#E8A832" strokeWidth="2" fill="none" opacity="0.8" />
+              <polyline points="19,27 24,18 29,27" stroke="#E8A832" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            </svg>
             <div>
-              <h1 className="text-xs font-semibold text-primary tracking-tight leading-none">ARC RAIDERS</h1>
-              <p className="text-[8px] text-tertiary font-mono uppercase tracking-[0.1em] leading-tight">Loadout Planner</p>
+              <h1 className="font-display font-bold text-accent text-sm tracking-tight leading-none">LOADOUT</h1>
+              <p className="text-[8px] text-tertiary font-mono uppercase tracking-[0.15em] leading-tight">PLANNER</p>
             </div>
           </div>
         </div>
@@ -34,7 +33,7 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all ${
+              className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all duration-200 rounded-t-sm ${
                 activeTab === tab.id
                   ? 'text-accent border-accent'
                   : 'text-tertiary border-transparent hover:text-primary hover:border-tertiary'
@@ -44,7 +43,7 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
             >
               {tab.label}
               {tab.id === 'planner' && savedCount > 0 && (
-                <span className="ml-1 px-1 py-0.5 text-[7px] bg-accent text-page rounded-full">{savedCount}</span>
+                <span className="ml-1.5 px-1.5 py-0.5 text-[7px] bg-accent text-page rounded-full font-semibold">{savedCount}</span>
               )}
             </button>
           ))}

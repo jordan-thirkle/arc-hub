@@ -16,8 +16,8 @@ export function ShieldSelect({ selectedId, onSelect }: ShieldSelectProps) {
       <div className="flex gap-1.5">
         <button
           onClick={() => onSelect(undefined)}
-          className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border transition-all ${
-            !selected ? 'bg-accent text-page border-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary'
+          className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
+            !selected ? 'bg-accent text-page border-accent shadow-glow-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
           }`}
         >
           None
@@ -26,8 +26,8 @@ export function ShieldSelect({ selectedId, onSelect }: ShieldSelectProps) {
           <button
             key={s.id}
             onClick={() => onSelect(s.id)}
-            className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border transition-all ${
-              selectedId === s.id ? 'bg-accent text-page border-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary'
+            className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
+              selectedId === s.id ? 'bg-accent text-page border-accent shadow-glow-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
             }`}
           >
             {s.name.replace(' Shield', '')}
@@ -35,7 +35,7 @@ export function ShieldSelect({ selectedId, onSelect }: ShieldSelectProps) {
         ))}
       </div>
       {selected && (
-        <div className="grid grid-cols-2 gap-2 p-2 border border-[rgb(var(--border-primary))] bg-surface">
+        <div className="grid grid-cols-2 gap-2 p-2 border border-[rgb(var(--border-primary))] rounded-md bg-surface">
           <div>
             <p className="text-[8px] font-mono uppercase text-tertiary">Charge</p>
             <p className="text-xs font-mono text-primary">{selected.charge}</p>

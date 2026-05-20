@@ -25,7 +25,7 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
       </h2>
       <button
         onClick={() => setExpanded(!expanded)}
-        className={`w-full p-2.5 border text-left transition-all ${
+        className={`w-full p-2.5 border text-left rounded-md transition-all ${
           selected ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]' : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary'
         }`}
       >
@@ -43,7 +43,7 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
       </button>
 
       {expanded && (
-        <div className="border border-[rgb(var(--border-primary))] bg-surface max-h-64 overflow-y-auto">
+        <div className="border border-[rgb(var(--border-primary))] bg-surface max-h-64 overflow-y-auto rounded-md shadow-card">
           {types.map(type => {
             const group = filtered.filter(a => a.type === type);
             if (group.length === 0) return null;

@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface StatBarProps {
   label: string;
   value: number;
@@ -22,10 +24,12 @@ export function StatBar({ label, value, baseValue, pct, better, suffix }: StatBa
           )}
         </span>
       </div>
-      <div className="h-1.5 bg-[rgb(var(--stat-bar-bg))]">
-        <div
-          className={`h-full transition-all duration-300 ${better ? 'bg-[rgb(var(--stat-fill))]' : 'bg-danger'}`}
-          style={{ width: `${Math.min(100, pct)}%` }}
+      <div className="h-1.5 bg-[rgb(var(--stat-bar-bg))] rounded-sm overflow-hidden">
+        <motion.div
+          className={`h-full rounded-sm ${better ? 'bg-[rgb(var(--stat-fill))]' : 'bg-danger'}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(100, pct)}%` }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
     </div>

@@ -38,10 +38,10 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
   const hasPoints = points > 0;
 
   return (
-    <div className={`border p-2 transition-all ${
+    <div className={`border p-2 rounded-md transition-all duration-200 ${
       hasPoints
-        ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]'
-        : 'border-[rgb(var(--border-primary))] bg-surface'
+        ? 'border-accent/50 bg-[rgb(var(--bg-elevated))] shadow-glow-accent'
+        : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary hover:shadow-sm'
     }`}>
       <div className="flex items-center justify-between mb-1">
         <span className="text-[10px] font-semibold text-primary truncate">{node.name}</span>
@@ -56,18 +56,18 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
         <button
           onClick={() => onRemove(nodeId)}
           disabled={!canRemove}
-          className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all"
+          className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] rounded-sm text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all active:scale-[0.9]"
           aria-label={`Remove point from ${node.name}`}
         >-</button>
         <div className="flex-1 flex gap-0.5">
           {Array.from({ length: node.maxPoints }).map((_, i) => (
-            <div key={i} className={`flex-1 h-1.5 ${i < points ? 'bg-accent' : 'bg-[rgb(var(--stat-bar-bg))]'}`} />
+            <div key={i} className={`flex-1 h-1.5 rounded-sm ${i < points ? 'bg-accent' : 'bg-[rgb(var(--stat-bar-bg))]'}`} />
           ))}
         </div>
         <button
           onClick={() => onAdd(nodeId)}
           disabled={!canAdd}
-          className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all"
+          className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] rounded-sm text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all active:scale-[0.9]"
           aria-label={`Add point to ${node.name}`}
         >+</button>
       </div>

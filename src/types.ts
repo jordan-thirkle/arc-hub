@@ -72,6 +72,9 @@ export interface WeaponStat {
   reloadSpeed: number;
   bulletVelocity: number;
   dispersion: number;
+  agility: number;
+  stability: number;
+  stealth: number;
 }
 
 export interface Attachment {

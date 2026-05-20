@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, lazy, Suspense } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { weapons, getWeaponById } from './data/weapons';
 import { attachments } from './data/attachments';
@@ -7,7 +8,7 @@ import { shields } from './data/shields';
 import { quickUseItems } from './data/quickuse';
 import { metaBuilds } from './data/metaBuilds';
 import { craftingRecipes } from './data/crafting';
-import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate } from './components';
+import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate, Hero } from './components';
 
 const WeaponComparison = lazy(() => import('./components/WeaponComparison').then(m => ({ default: m.WeaponComparison })));
 const BuildSubmissionForm = lazy(() => import('./components/BuildSubmissionForm').then(m => ({ default: m.BuildSubmissionForm })));
@@ -19,14 +20,18 @@ import { useCommunityBuilds } from './hooks/useCommunityBuilds';
 import { useVotes } from './hooks/useVotes';
 import { getBuildFromUrl } from './utils/buildUrl';
 import { filterBuilds, getUniqueRoles, filterCommunityBuilds } from './utils/filters';
-import { fetchAllWeapons } from './utils/api';
-import { mergeApiWeapons } from './data/weapons';
-import { useLiveData } from './hooks/useLiveData';
+
 import { calculateMaterialsForItems } from './utils/crafting';
 import { getRecommendedAllocation } from './utils/skills';
 import { patches, latestPatch } from './data/patches';
 import type { Build, WeaponTier, BuildRole } from './types';
 import { AMMO_COLORS, SLOT_LABELS } from './types';
+
+const tabVariants = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as const } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
+};
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -50,15 +55,6 @@ export default function App() {
 
   const { builds: communityBuilds, submitBuild } = useCommunityBuilds();
   const { userVotes, setVote } = useVotes();
-
-  const { source: dataSource, loading: dataLoading } = useLiveData(
-    async () => {
-      const apiData = await fetchAllWeapons();
-      return mergeApiWeapons(apiData as Record<string, unknown>);
-    },
-    weapons,
-    'ar-live-weapons',
-  );
 
   const navigateToPatches = useCallback(() => {
     setActiveTab('database');
@@ -119,6 +115,11 @@ export default function App() {
 
   const craftSummary = calculateMaterialsForItems(craftQueue);
   const weaponCount = weapons.length;
+  const appRef = useRef<HTMLDivElement>(null);
+  const scrollToApp = () => appRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleStartBuilding = () => { setActiveTab('planner'); scrollToApp(); };
+  const handleBrowseDatabase = () => { setActiveTab('database'); scrollToApp(); };
+  const handleMetaBuilds = () => { setActiveTab('builds'); scrollToApp(); };
 
   return (
     <>
@@ -128,26 +129,31 @@ export default function App() {
         <meta property="og:description" content="Interactive weapon loadout planner for Arc Raiders. Browse weapons, attachments, augments, shields, skill tree, and crafting." />
         <meta name="description" content="Plan, optimize, and share Arc Raiders weapon loadouts. Interactive build planner with real-time stats and shareable build URLs." />
       </Helmet>
-      <div className="min-h-screen bg-page text-primary">
+
+      <Hero
+        onStartBuilding={handleStartBuilding}
+        onBrowseDatabase={handleBrowseDatabase}
+        onMetaBuilds={handleMetaBuilds}
+      />
+
+      <div ref={appRef} className="min-h-screen bg-page text-primary">
         <Header activeTab={activeTab} onTabChange={setActiveTab} savedCount={savedBuilds.length} />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-          {/* ── PLANNER TAB ── */}
+          <AnimatePresence mode="wait">
           {activeTab === 'planner' && (
-            <div className="space-y-6">
-              <div className="text-center pb-4 border-b border-[rgb(var(--border-primary))]">
-                <h2 className="text-2xl md:text-4xl font-display font-light text-primary mb-2 tracking-tight">
-                  Plan. Optimize. <span className="text-accent">Extract.</span>
-                </h2>
-                <p className="text-xs text-secondary max-w-xl mx-auto">
-                  Build the perfect loadout for the Topside. Select weapons, attachments, augments, and shields.
-                </p>
-                <button id="toggle-compare" onClick={() => setShowComparison(p => !p)}
-                  className="mt-2 px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border transition-all mx-auto block ${
+            <motion.div key="planner" variants={tabVariants} initial="initial" animate="animate" exit="exit" className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[rgb(var(--border-primary))]">
+                <div>
+                  <h2 className="text-sm font-display font-bold text-accent tracking-tight">BUILDER</h2>
+                  <p className="text-[10px] text-tertiary font-mono">Configure your loadout</p>
+                </div>
+                <button onClick={() => setShowComparison(p => !p)}
+                  className="px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
                     showComparison ? 'bg-accent text-page border-accent' : 'border-[rgb(var(--border-primary))] text-tertiary hover:text-primary'
                   }">
-                  {showComparison ? 'Close Comparison' : 'Compare Weapons'}
+                  {showComparison ? 'Close Compare' : 'Compare Weapons'}
                 </button>
               </div>
 
@@ -221,12 +227,12 @@ export default function App() {
                 <BuildActions build={build} onSave={handleSave} savedBuilds={savedBuilds}
                   onLoadBuild={handleLoad} onDeleteBuild={handleDelete} onReset={reset} />
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* ── BUILDS TAB ── */}
           {activeTab === 'builds' && (
-            <div className="space-y-4">
+            <motion.div key="builds" variants={tabVariants} initial="initial" animate="animate" exit="exit" className="space-y-4">
               <div className="flex gap-0 border-b border-[rgb(var(--border-primary))]" role="tablist">
                 {[
                   { id: 'meta', label: 'Meta Builds' },
@@ -369,12 +375,12 @@ export default function App() {
                   )}
                 </>
               )}
-            </div>
+            </motion.div>
           )}
 
           {/* ── DATABASE TAB ── */}
           {activeTab === 'database' && (
-            <div className="space-y-6">
+            <motion.div key="database" variants={tabVariants} initial="initial" animate="animate" exit="exit" className="space-y-6">
               <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Database</h2>
               <div className="flex gap-0 border-b border-[rgb(var(--border-primary))]" role="tablist">
                 {[
@@ -508,12 +514,12 @@ export default function App() {
                   <GearAffiliate />
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* ── SKILLS TAB ── */}
           {activeTab === 'skills' && (
-            <div className="space-y-4">
+            <motion.div key="skills" variants={tabVariants} initial="initial" animate="animate" exit="exit" className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Skill Tree</h2>
                 <div className="flex items-center gap-2">
@@ -556,12 +562,12 @@ export default function App() {
                     remainingPoints={remainingPoints} onAdd={addPoint} onRemove={removePoint} />
                 </Suspense>
               )}
-            </div>
+            </motion.div>
           )}
 
           {/* ── CRAFT TAB ── */}
           {activeTab === 'craft' && (
-            <div className="space-y-6">
+            <motion.div key="craft" variants={tabVariants} initial="initial" animate="animate" exit="exit" className="space-y-6">
               <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Crafting Calculator</h2>
               <p className="text-xs text-tertiary">Select items to craft. Materials are summed across all selected recipes.</p>
 
@@ -632,8 +638,9 @@ export default function App() {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
+        </AnimatePresence>
         </main>
 
         <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-8 border-t border-[rgb(var(--border-primary))] text-center">
@@ -644,23 +651,14 @@ export default function App() {
             ARC Raiders Loadout Planner — Community tool. Not affiliated with Embark Studios.
           </p>
           <p className="text-[8px] text-tertiary mt-1">
-            Game data by <a href="https://metaforge.app/arc-raiders" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">MetaForge</a>. Stats approximate, may change with updates.
+            Weapon &amp; shield data from <a href="https://metaforge.app/arc-raiders/database" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">MetaForge</a>, <a href="https://github.com/RaidTheory/arcraiders-data" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">RaidTheory/arcraiders-data</a> and <a href="https://arcdata.mahcks.com/v1" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">arcdata.mahcks.com</a>. Stats may change with updates.
           </p>
           <div className="flex items-center justify-center gap-3 mt-3">
-            <a href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener noreferrer"
+            <a href="https://ko-fi.com/thirkle" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-mono border border-[rgb(var(--border-primary))] text-tertiary hover:text-primary hover:border-tertiary transition-all">
               <span>&#9749;</span> Support on Ko-fi
             </a>
           </div>
-          <p className="text-[7px] font-mono mt-2 inline-flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full inline-block ${
-              dataSource === 'live' ? 'bg-green-400' : dataSource === 'cached' ? 'bg-amber-400' : 'bg-gray-500'
-            }`} />
-            <span className="text-tertiary">
-              Data: {dataSource === 'live' ? 'Live' : dataSource === 'cached' ? 'Cached' : 'Static'}
-              {dataLoading && ' (refreshing...)'}
-            </span>
-          </p>
         </footer>
       </div>
 

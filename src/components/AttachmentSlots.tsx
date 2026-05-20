@@ -18,7 +18,7 @@ export function AttachmentSlots({ weaponId, slots, attachments: current, onEquip
 
   if (slots.length === 0) {
     return (
-      <div className="p-4 border border-[rgb(var(--border-primary))] bg-surface text-center">
+      <div className="p-4 border border-[rgb(var(--border-primary))] bg-surface text-center rounded-md">
         <p className="text-xs text-tertiary font-mono uppercase tracking-[0.1em]">
           No Attachment Slots
         </p>
@@ -42,9 +42,9 @@ export function AttachmentSlots({ weaponId, slots, attachments: current, onEquip
             <div key={slot} className="relative">
               <button
                 onClick={() => setOpenSlot(isOpen ? null : slot)}
-                className={`w-full text-left p-2 border transition-all ${
+                className={`w-full text-left p-2 border rounded-md transition-all ${
                   equipped?.attachmentId
-                    ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]'
+                    ? 'border-accent/50 bg-[rgb(var(--bg-elevated))] shadow-glow-accent'
                     : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary'
                 }`}
                 aria-expanded={isOpen}
@@ -64,7 +64,7 @@ export function AttachmentSlots({ weaponId, slots, attachments: current, onEquip
               </button>
 
               {isOpen && (
-                <div className="absolute z-20 top-full left-0 right-0 mt-1 border border-[rgb(var(--border-primary))] bg-surface shadow-xl max-h-56 overflow-y-auto min-w-[200px]" role="listbox">
+                <div className="absolute z-20 top-full left-0 right-0 mt-1 border border-[rgb(var(--border-primary))] bg-surface rounded-md shadow-elevated max-h-56 overflow-y-auto min-w-[200px]" role="listbox">
                   <button
                     onClick={() => { onEquip(slot, null); setOpenSlot(null); }}
                     className={`w-full text-left px-3 py-1.5 text-[11px] transition-colors hover:bg-[rgb(var(--bg-elevated))] ${

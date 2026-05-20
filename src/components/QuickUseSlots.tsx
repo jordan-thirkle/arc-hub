@@ -34,8 +34,8 @@ export function QuickUseSlots({ items, onSetItem, maxSlots = 5 }: QuickUseSlotsP
             <div key={i} className="relative">
               <button
                 onClick={() => setOpenSlot(isOpen ? null : i)}
-                className={`w-full aspect-square p-1 border transition-all flex flex-col items-center justify-center text-center ${
-                  item ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]' : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary'
+                className={`w-full aspect-square p-1 border rounded-md transition-all flex flex-col items-center justify-center text-center ${
+                  item ? 'border-accent/50 bg-[rgb(var(--bg-elevated))] shadow-glow-accent' : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary hover:shadow-sm'
                 }`}
                 aria-label={`Quick use slot ${i + 1}`}
               >
@@ -50,13 +50,13 @@ export function QuickUseSlots({ items, onSetItem, maxSlots = 5 }: QuickUseSlotsP
               </button>
 
               {isOpen && (
-                <div className="absolute z-20 top-full left-0 mt-1 w-64 border border-[rgb(var(--border-primary))] bg-surface shadow-xl" role="listbox">
+                <div className="absolute z-20 top-full left-0 mt-1 w-64 border border-[rgb(var(--border-primary))] bg-surface rounded-md shadow-elevated" role="listbox">
                   <div className="flex flex-wrap gap-0.5 p-1.5 border-b border-[rgb(var(--border-primary))]">
                     {categories.map(c => (
                       <button
                         key={c}
                         onClick={() => setCategory(c)}
-                        className={`px-1.5 py-0.5 text-[8px] font-mono uppercase tracking-[0.1em] border transition-all ${
+                        className={`px-1.5 py-0.5 text-[8px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
                           category === c ? 'bg-accent text-page border-accent' : 'text-tertiary border-[rgb(var(--border-primary))]'
                         }`}
                       >
