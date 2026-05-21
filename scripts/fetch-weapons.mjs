@@ -17,7 +17,18 @@ const AMMO_MAP = {
   'shotgun': 'shotgun', 'energy': 'energy', 'launcher': 'launcher',
 };
 
-// Fallback data for weapons the API doesn't have stats for
+const HANDLING_PROFILES = {
+  'Assault Rifle': { verticalRecoil: 25, horizontalRecoil: 15, adsSpeed: 0.35, reloadSpeed: 2.2, bulletVelocity: 550, dispersion: 1.8 },
+  'Battle Rifle': { verticalRecoil: 30, horizontalRecoil: 12, adsSpeed: 0.38, reloadSpeed: 2.5, bulletVelocity: 620, dispersion: 1.2 },
+  'SMG': { verticalRecoil: 18, horizontalRecoil: 20, adsSpeed: 0.25, reloadSpeed: 1.8, bulletVelocity: 380, dispersion: 2.5 },
+  'Shotgun': { verticalRecoil: 40, horizontalRecoil: 25, adsSpeed: 0.40, reloadSpeed: 3.0, bulletVelocity: 300, dispersion: 4.0 },
+  'Sniper Rifle': { verticalRecoil: 50, horizontalRecoil: 8, adsSpeed: 0.60, reloadSpeed: 3.5, bulletVelocity: 820, dispersion: 0.5 },
+  'LMG': { verticalRecoil: 35, horizontalRecoil: 18, adsSpeed: 0.50, reloadSpeed: 4.0, bulletVelocity: 520, dispersion: 2.0 },
+  'Pistol': { verticalRecoil: 15, horizontalRecoil: 10, adsSpeed: 0.20, reloadSpeed: 1.5, bulletVelocity: 350, dispersion: 2.0 },
+  'Hand Cannon': { verticalRecoil: 45, horizontalRecoil: 20, adsSpeed: 0.45, reloadSpeed: 2.8, bulletVelocity: 450, dispersion: 1.5 },
+  'Special': { verticalRecoil: 20, horizontalRecoil: 12, adsSpeed: 0.30, reloadSpeed: 2.0, bulletVelocity: 400, dispersion: 2.5 },
+};
+
 const FALLBACK = {
   'aphelion-rifle': { name: 'Aphelion Rifle', cls: 'Battle Rifle', ammo: 'energy', mode: '2-Round Burst',
     desc: 'Energy BR. Low ammo consumption, high precision.', rarity: 'Legendary',
@@ -50,6 +61,12 @@ function tierLabel(idx) { return ['I', 'II', 'III', 'IV'][idx]; }
 
 function cleanName(name) {
   return name.replace(/ I+$/, '').replace(/ IV$/, '').replace(/ III$/, '').replace(/ II$/, '').replace(/ I$/, '');
+}
+
+function applyTierMultiplier(baseVal, tier, isRecoil) {
+  const tMult = 1 + tier * 0.07;
+  const rMult = 1 - tier * 0.07;
+  return Math.round((isRecoil ? baseVal * rMult : baseVal * tMult) * 10) / 10;
 }
 
 async function fetchAllItems() {
@@ -92,12 +109,12 @@ async function main() {
     const t0 = resolved[0] || tierItems[0];
     if (!t0) continue;
 
-    // Check if API has stats or we need fallback
     const fb = FALLBACK[base];
 
     const subcategory = (t0.subcategory || '').trim();
     const weaponClass = SUBCLASS_MAP[subcategory] || fb?.cls || 'Special';
-    const ammoType = AMMO_MAP[(t0.ammo_type || '').toLowerCase()] || (fb ? AMMO_MAP[fb.ammo] || 'energy' : 'medium');
+    const ammoType = AMMO_MAP[(t0.stat_block?.ammo || t0.ammo_type || '').toLowerCase()] || (fb ? AMMO_MAP[fb.ammo] || 'energy' : 'medium');
+    const baseHandling = HANDLING_PROFILES[weaponClass] || HANDLING_PROFILES['Assault Rifle'];
 
     const tData = [];
     for (let i = 0; i < 4; i++) {
@@ -113,26 +130,31 @@ async function main() {
         rng = sb.range || 0;
         mag = sb.magazineSize || 0;
         wgt = sb.weight || 0;
-        val = item.value || 0;
+        val = item.value || sb.value || 0;
         agi = sb.agility || 0;
         stab = sb.stability || 0;
         stea = sb.stealth || 0;
-        ver = 0; hor = 0; ads = 0; rel = 0; bv = 0; disp = 0;
+        // Use class-based handling estimates scaled by tier
+        ver = Math.round(baseHandling.verticalRecoil * Math.pow(0.93, i) * 10) / 10;
+        hor = Math.round(baseHandling.horizontalRecoil * Math.pow(0.93, i) * 10) / 10;
+        ads = Math.round(baseHandling.adsSpeed * (1 - i * 0.05) * 100) / 100;
+        rel = Math.round(baseHandling.reloadSpeed * (1 - i * 0.04) * 10) / 10;
+        bv = baseHandling.bulletVelocity;
+        disp = Math.round(baseHandling.dispersion * Math.pow(0.95, i) * 10) / 10;
       } else if (fb) {
-        const t = i;
-        const tMult = 1 + t * 0.07;
-        const rMult = 1 - t * 0.07;
+        const tMult = 1 + i * 0.07;
+        const rMult = 1 - i * 0.07;
         dmg = Math.round(fb.dmg * tMult * 10) / 10;
         fr = fb.fr;
         rng = fb.rng;
-        mag = fb.mag + t * 4;
+        mag = fb.mag + i * 4;
         wgt = fb.weight;
-        val = fb.val[t];
+        val = fb.val[i];
         agi = 0; stab = 0; stea = 0;
         ver = Math.round(fb.ver * rMult * 10) / 10;
         hor = Math.round(fb.hor * rMult * 10) / 10;
-        ads = Math.round(fb.ads * (1 + t * 0.05) * 10) / 10;
-        rel = Math.round(fb.rel * (1 - t * 0.05) * 10) / 10;
+        ads = Math.round(fb.ads * (1 + i * 0.05) * 100) / 100;
+        rel = Math.round(fb.rel * (1 - i * 0.05) * 10) / 10;
         bv = fb.bv;
         disp = Math.round(fb.disp * rMult * 10) / 10;
       } else {
@@ -142,19 +164,28 @@ async function main() {
       tData.push({
         tier: i,
         label: tierLabel(i),
-        stats: { damage: dmg, fireRate: fr, range: rng, dps: Math.round(dmg * fr * 10) / 10, magSize: mag, verticalRecoil: ver, horizontalRecoil: hor, adsSpeed: ads, reloadSpeed: rel, bulletVelocity: bv, dispersion: disp, agility: agi, stability: stab, stealth: stea },
+        stats: {
+          damage: dmg, fireRate: fr, range: rng,
+          dps: Math.round(dmg * fr * 10) / 10,
+          magSize: mag,
+          verticalRecoil: ver, horizontalRecoil: hor,
+          adsSpeed: ads, reloadSpeed: rel,
+          bulletVelocity: bv, dispersion: disp,
+          agility: agi, stability: stab, stealth: stea,
+        },
         value: val,
         weight: wgt,
       });
     }
 
     const fname = t0.name;
+    const firingMode = sb => sb.firingMode || '';
     records.push({
       id: base,
       name: fb ? fb.name : cleanName(fname),
       class: weaponClass,
       ammoType,
-      firingMode: fb?.mode || '',
+      firingMode: fb?.mode || firingMode(t0.stat_block),
       image: t0.icon,
       description: t0.description || fb?.desc || '',
       rarity: t0.rarity || fb?.rarity || 'Common',
@@ -163,7 +194,6 @@ async function main() {
     });
   }
 
-  // Generate TypeScript
   const lines = [];
   lines.push('import type { Weapon, WeaponTier, WeaponStat, WeaponClass, AmmoType, AttachmentSlot } from \'../types\';');
   lines.push('');
@@ -213,8 +243,8 @@ async function main() {
   writeFileSync(outPath, lines.join('\n'), 'utf-8');
   console.log(`\nWritten: ${outPath}`);
   console.log(`  ${records.length} weapons`);
-  console.log(`  ${records.filter(r => r.tiers.some(t => t.stats.damage > 0)).length} with API stats`);
-  console.log(`  ${records.filter(r => r.tiers.every(t => t.stats.damage === 0)).length} fallback weapons`);
+  console.log(`  ${records.filter(r => r.tiers.some(t => t.stats.damage > 0)).length} with API core stats`);
+  console.log(`  ${records.filter(r => r.tiers.every(t => t.stats.damage === 0)).length} fallback-only weapons`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
