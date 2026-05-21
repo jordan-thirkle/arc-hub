@@ -1,7 +1,8 @@
+import LZString from 'lz-string';
 import type { Build, WeaponTier, AttachmentSlot } from '../types';
 
 interface URLData {
-  v: 2;
+  v: 3;
   w: string; wt: number; wa: [string, string | null][];
   s?: string; st?: number; sa?: [string, string | null][];
   a?: string; sh?: string;
@@ -9,16 +10,18 @@ interface URLData {
 }
 
 function encode(str: string): string {
-  return btoa(encodeURIComponent(str));
+  return LZString.compressToEncodedURIComponent(str);
 }
 
-function decode(str: string): string {
-  return decodeURIComponent(atob(str));
+function decode(str: string): string | null {
+  const result = LZString.decompressFromEncodedURIComponent(str);
+  if (result === null || result === undefined || result === '') return null;
+  return result;
 }
 
 export function encodeBuild(build: Omit<Build, 'id' | 'createdAt'>): string {
   const data: URLData = {
-    v: 2,
+    v: 3,
     w: build.primaryWeaponId,
     wt: build.primaryTier,
     wa: build.primaryAttachments.map(a => [a.slot, a.attachmentId]),
@@ -34,8 +37,9 @@ export function encodeBuild(build: Omit<Build, 'id' | 'createdAt'>): string {
 export function decodeBuild(hash: string): (Omit<Build, 'id' | 'createdAt'>) | null {
   try {
     const json = decode(hash);
+    if (!json) return null;
     const data: URLData = JSON.parse(json);
-    if (!data.w || data.v !== 2) return null;
+    if (!data.w || data.v !== 3) return null;
     return {
       name: '',
       primaryWeaponId: data.w, primaryTier: (data.wt ?? 0) as WeaponTier,

@@ -64,6 +64,34 @@ export const traders: Trader[] = [
       { itemId: 'trauma-kit', price: 3000, stockLimit: 1, category: 'Augment' },
     ],
   },
+  {
+    id: 'ermal',
+    name: 'Ermal — Nomadic Envoy',
+    currency: 'Topside Valuables',
+    inventory: [
+      { itemId: 'stash-expansion', price: 250000, stockLimit: 1, category: 'Service' },
+      { itemId: 'vault-access-key', price: 500000, stockLimit: 1, category: 'Key' },
+      { itemId: 'tempest-blueprint', price: 1000000, stockLimit: 1, category: 'Blueprint' },
+      { itemId: 'rascal-blueprint', price: 800000, stockLimit: 1, category: 'Blueprint' },
+      { itemId: 'rare-weapon-case', price: 350000, stockLimit: 3, category: 'Container' },
+      { itemId: 'expedition-supply-drop', price: 150000, stockLimit: 5, category: 'Supply' },
+    ],
+  },
+];
+
+export const ermalAcceptedItems = [
+  { id: 'queen-reactor', name: 'Queen Reactor', valueCategory: 'Extremely High', baseValue: 250000 },
+  { id: 'matriarch-reactor', name: 'Matriarch Reactor', valueCategory: 'Extremely High', baseValue: 200000 },
+  { id: 'bombardier-cell', name: 'Bombardier Cell', valueCategory: 'High', baseValue: 120000 },
+  { id: 'assessor-matrix', name: 'Assessor Matrix', valueCategory: 'High', baseValue: 100000 },
+  { id: 'turbine-compressor', name: 'Turbine Compressor', valueCategory: 'High', baseValue: 80000 },
+  { id: 'leaper-pulse-unit', name: 'Leaper Pulse Unit', valueCategory: 'Medium', baseValue: 40000 },
+  { id: 'projector', name: 'Projector', valueCategory: 'Medium', baseValue: 25000 },
+  { id: 'circuit-board', name: 'Circuit Board', valueCategory: 'Medium', baseValue: 20000 },
+  { id: 'energy-cell', name: 'Energy Cell', valueCategory: 'Low', baseValue: 10000 },
+  { id: 'titanium-alloy', name: 'Titanium Alloy', valueCategory: 'Low', baseValue: 8000 },
+  { id: 'scrap-metal', name: 'Scrap Metal', valueCategory: 'Low', baseValue: 3000 },
+  { id: 'polymer', name: 'Polymer', valueCategory: 'Low', baseValue: 2000 },
 ];
 
 export function getTraderById(id: string): Trader | undefined {

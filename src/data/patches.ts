@@ -56,6 +56,27 @@ export const patches: PatchEntry[] = [
     weaponsAffected: [],
     metaChanges: true,
   },
+  {
+    id: '1.29',
+    version: '1.29',
+    date: '2026-05-19',
+    title: 'Nomadic Envoy',
+    changes: [
+      'New trader: Ermal — Nomadic Envoy (weekly rotating rare stock)',
+      'New weapon: Rascal — single-shot grenade launcher',
+      'Improved ARC visual detection through foliage',
+      'Photoelectric Cloak power cost reduced from 10/s to 5/s',
+      'Adjusted global weapon durabilities — all weapons burn durability faster',
+      'Tempest assault rifle damage buff: +5% base damage',
+      'Firefly AI behavior altered — reduced aggro range, increased patrol speed',
+      'Anvil horizontal recoil reduced by 15%',
+      'New attachment: Extended Barrel now craftable at Gunsmith Bench Lv.3',
+      'Added Stash expansion slot purchase via Ermal (up to +50 slots)',
+      'New Expedition Vault access key — purchasable from Ermal during stock rotation',
+    ],
+    weaponsAffected: ['rascal', 'tempest', 'anvil'],
+    metaChanges: true,
+  },
 ];
 
 export const latestPatch = patches[patches.length - 1];

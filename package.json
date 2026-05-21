@@ -13,15 +13,18 @@
     "fetch:weapons": "node scripts/fetch-weapons.mjs"
   },
   "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
     "@sentry/react": "^10.53.1",
     "@supabase/supabase-js": "^2.106.0",
     "@vercel/analytics": "^2.0.1",
     "@xyflow/react": "^12.10.2",
     "framer-motion": "^12.39.0",
     "lucide-react": "^1.16.0",
+    "lz-string": "^1.5.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-helmet-async": "^3.0.0"
+    "react-helmet-async": "^3.0.0",
+    "satori": "^0.26.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

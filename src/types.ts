@@ -130,6 +130,8 @@ export interface Shield {
   name: ShieldName;
   charge: number;
   damageMitigation: number;
+  penetrationModifier: number;
+  hp: number;
   movementPenalty: number;
   weight: number;
   compatibleAugments: string[];
@@ -242,6 +244,20 @@ export const SLOT_LABELS: Record<AttachmentSlot, string> = {
   'shotgun-magazine': 'Tube Mag',
   stock: 'Stock',
   'tech-mod': 'Tech Mod',
+};
+
+export interface ErmalAcceptedItem {
+  id: string;
+  name: string;
+  valueCategory: 'Extremely High' | 'High' | 'Medium' | 'Low';
+  baseValue: number;
+}
+
+export const ERMAL_TARGET_VALUES = {
+  'tempest-blueprint': 1000000,
+  'rascal-blueprint': 800000,
+  'vault-access-key': 500000,
+  'stash-expansion': 250000,
 };
 
 export const AMMO_COLORS: Record<AmmoType, string> = {

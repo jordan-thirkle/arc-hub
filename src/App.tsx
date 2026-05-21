@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, lazy, Suspense, useRef } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { weapons, getWeaponById } from './data/weapons';
@@ -8,7 +8,7 @@ import { shields } from './data/shields';
 import { quickUseItems } from './data/quickuse';
 import { metaBuilds } from './data/metaBuilds';
 import { craftingRecipes } from './data/crafting';
-import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate, Hero } from './components';
+import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, TTKCalculator, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate, Hero, ErmalTracker } from './components';
 
 const WeaponComparison = lazy(() => import('./components/WeaponComparison').then(m => ({ default: m.WeaponComparison })));
 const BuildSubmissionForm = lazy(() => import('./components/BuildSubmissionForm').then(m => ({ default: m.BuildSubmissionForm })));
@@ -18,7 +18,7 @@ import { useSkills } from './hooks/useSkills';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useCommunityBuilds } from './hooks/useCommunityBuilds';
 import { useVotes } from './hooks/useVotes';
-import { getBuildFromUrl } from './utils/buildUrl';
+import { getBuildFromUrl, encodeBuild } from './utils/buildUrl';
 import { filterBuilds, getUniqueRoles, filterCommunityBuilds } from './utils/filters';
 
 import { calculateMaterialsForItems } from './utils/crafting';
@@ -113,6 +113,13 @@ export default function App() {
     search: '', minRating: 0, sortBy: buildSort, sortDir: 'desc',
   });
 
+  const buildShareUrl = useMemo(() => {
+    try { return encodeBuild(build); } catch { return ''; }
+  }, [build]);
+  const ogImageUrl = buildShareUrl
+    ? `${window.location.origin}/api/og?build=${encodeURIComponent(buildShareUrl)}`
+    : `${window.location.origin}/og-image.svg`;
+
   const craftSummary = calculateMaterialsForItems(craftQueue);
   const weaponCount = weapons.length;
   const appRef = useRef<HTMLDivElement>(null);
@@ -128,6 +135,10 @@ export default function App() {
         <meta property="og:title" content="ARC Raiders Loadout Planner" />
         <meta property="og:description" content="Interactive weapon loadout planner for Arc Raiders. Browse weapons, attachments, augments, shields, skill tree, and crafting." />
         <meta name="description" content="Plan, optimize, and share Arc Raiders weapon loadouts. Interactive build planner with real-time stats and shareable build URLs." />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content={ogImageUrl} />
       </Helmet>
 
       <Hero
@@ -209,6 +220,8 @@ export default function App() {
                       </div>
 
                       <StatBreakdown weapon={primaryWeapon} tier={build.primaryTier} attachments={build.primaryAttachments} />
+
+                      <TTKCalculator weapon={primaryWeapon} tier={build.primaryTier} attachments={build.primaryAttachments} />
 
                       <QuickUseSlots items={build.quickUseItems} onSetItem={setQuickUseItem} />
                     </>
@@ -388,13 +401,14 @@ export default function App() {
                   { id: 'attachments', label: 'Attachments', badge: attachments.length },
                   { id: 'items', label: 'Items', badge: quickUseItems.length },
                   { id: 'patches', label: 'Patches', badge: patches.length },
+                  { id: 'ermal', label: 'Ermal', badge: undefined },
                 ].map(tab => (
                   <button key={tab.id} onClick={() => setDbTab(tab.id)}
                     className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all ${
                       dbTab === tab.id ? 'text-accent border-accent' : 'text-tertiary border-transparent hover:text-primary'
                     }`} role="tab" aria-selected={dbTab === tab.id}>
                     {tab.label}
-                    <span className="ml-1 text-[9px] text-tertiary">({tab.badge})</span>
+                    {tab.badge !== undefined && <span className="ml-1 text-[9px] text-tertiary">({tab.badge})</span>}
                   </button>
                 ))}
               </div>
@@ -506,6 +520,10 @@ export default function App() {
 
                   {dbTab === 'patches' && (
                     <PatchNotes />
+                  )}
+
+                  {dbTab === 'ermal' && (
+                    <ErmalTracker />
                   )}
                 </div>
 

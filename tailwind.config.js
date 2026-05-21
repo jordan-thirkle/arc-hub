@@ -7,6 +7,8 @@ export default {
         sans: ['"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
         display: ['"Barlow Condensed"', 'sans-serif'],
+        heading: ['"Barlow Condensed"', 'sans-serif'],
+        subheading: ['"Prompt"', 'sans-serif'],
       },
       colors: {
         page: 'rgb(var(--bg-page))',
@@ -19,6 +21,8 @@ export default {
         tertiary: 'rgb(var(--text-tertiary))',
         accent: 'rgb(var(--accent))',
         'accent-hover': 'rgb(var(--accent-hover))',
+        'accent-orange': 'rgb(var(--accent-orange))',
+        'accent-cyan': 'rgb(var(--accent-cyan))',
         'accent-blue': 'rgb(var(--accent-blue))',
         'accent-green': 'rgb(var(--accent-green))',
         'accent-warning': 'rgb(var(--accent-warning))',

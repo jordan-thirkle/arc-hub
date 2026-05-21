@@ -3,6 +3,7 @@ import type { Shield } from '../types';
 export const shields: Shield[] = [
   {
     id: 'light-shield', name: 'Light Shield', charge: 40, damageMitigation: 0.40,
+    penetrationModifier: 0.60, hp: 75,
     movementPenalty: 0, weight: 5,
     compatibleAugments: [
       'pressure-regulator', 'kinetic-capacitor', 'focus',
@@ -17,6 +18,7 @@ export const shields: Shield[] = [
   },
   {
     id: 'medium-shield', name: 'Medium Shield', charge: 70, damageMitigation: 0.425,
+    penetrationModifier: 0.55, hp: 125,
     movementPenalty: 0.05, weight: 7,
     compatibleAugments: [
       'pressure-regulator', 'kinetic-capacitor', 'focus',
@@ -32,6 +34,7 @@ export const shields: Shield[] = [
   },
   {
     id: 'heavy-shield', name: 'Heavy Shield', charge: 80, damageMitigation: 0.525,
+    penetrationModifier: 0.45, hp: 200,
     movementPenalty: 0.15, weight: 9,
     compatibleAugments: [
       'pressure-regulator', 'kinetic-capacitor', 'focus',

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { encodeBuild, decodeBuild } from '../buildUrl';
+import LZString from 'lz-string';
 import type { Build, WeaponTier } from '../../types';
 
 const sampleBuild: Omit<Build, 'id' | 'createdAt'> = {
@@ -58,7 +59,7 @@ describe('encodeBuild / decodeBuild', () => {
   });
 
   it('returns null for wrong version', () => {
-    const badData = btoa(encodeURIComponent(JSON.stringify({ v: 1, w: 'kettle' })));
+    const badData = LZString.compressToEncodedURIComponent(JSON.stringify({ v: 1, w: 'kettle' }));
     expect(decodeBuild(badData)).toBeNull();
   });
 
