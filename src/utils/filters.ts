@@ -49,10 +49,11 @@ export function filterBuilds(builds: MetaBuild[], filters: BuildFilters): MetaBu
   }
   if (filters.search) {
     const q = filters.search.toLowerCase();
-    result = result.filter(b =>
-      b.name.toLowerCase().includes(q) ||
-      b.description.toLowerCase().includes(q) ||
-      b.tags.some(t => t.toLowerCase().includes(q))
+    result = result.filter(
+      b =>
+        b.name.toLowerCase().includes(q) ||
+        b.description.toLowerCase().includes(q) ||
+        b.tags.some(t => t.toLowerCase().includes(q)),
     );
   }
   if (filters.minRating > 0) {
@@ -60,12 +61,14 @@ export function filterBuilds(builds: MetaBuild[], filters: BuildFilters): MetaBu
   }
 
   result.sort((a, b) => {
-    let cmp = 0;
     switch (filters.sortBy) {
-      case 'rating': cmp = a.rating - b.rating; break;
-      case 'votes': cmp = a.votes - b.votes; break;
+      case 'rating':
+        return filters.sortDir === 'desc' ? b.rating - a.rating : a.rating - b.rating;
+      case 'votes':
+        return filters.sortDir === 'desc' ? b.votes - a.votes : a.votes - b.votes;
+      default:
+        return 0;
     }
-    return filters.sortDir === 'desc' ? -cmp : cmp;
   });
 
   return result;
@@ -88,19 +91,26 @@ export function filterCommunityBuilds(builds: CommunityBuild[], filters: BuildFi
   if (filters.role !== 'all') result = result.filter(b => b.role === filters.role);
   if (filters.search) {
     const q = filters.search.toLowerCase();
-    result = result.filter(b =>
-      b.name.toLowerCase().includes(q) ||
-      b.tags.some(t => t.toLowerCase().includes(q))
-    );
+    result = result.filter(b => b.name.toLowerCase().includes(q) || b.tags.some(t => t.toLowerCase().includes(q)));
   }
 
   result.sort((a, b) => {
-    let cmp = 0;
     switch (filters.sortBy) {
-      case 'rating': cmp = (a.net_votes ?? 0) - (b.net_votes ?? 0); break;
-      case 'votes': cmp = (a.net_votes ?? 0) - (b.net_votes ?? 0); break;
+      case 'votes':
+        return filters.sortDir === 'desc'
+          ? (b.net_votes ?? 0) - (a.net_votes ?? 0)
+          : (a.net_votes ?? 0) - (b.net_votes ?? 0);
+      case 'rating':
+        return filters.sortDir === 'desc'
+          ? (b.net_votes ?? 0) - (a.net_votes ?? 0)
+          : (a.net_votes ?? 0) - (b.net_votes ?? 0);
+      case 'newest':
+        return filters.sortDir === 'desc'
+          ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      default:
+        return 0;
     }
-    return filters.sortDir === 'desc' ? -cmp : cmp;
   });
 
   return result;

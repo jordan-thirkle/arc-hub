@@ -30,7 +30,9 @@ export function useApi<T>(fetcher: () => Promise<T>): UseApiResult<T> {
     mountedRef.current = true;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetch();
-    return () => { mountedRef.current = false; };
+    return () => {
+      mountedRef.current = false;
+    };
   }, [fetch]);
 
   return { data, loading, error, refetch: fetch };

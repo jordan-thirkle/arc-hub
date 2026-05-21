@@ -14,18 +14,14 @@ export function TabPanel({ tabs, active, onChange, children }: TabPanelProps) {
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={`relative px-4 py-3 text-[11px] font-mono uppercase tracking-[0.1em] transition-all ${
-              active === tab.id
-                ? 'text-accent border-b-2 border-accent'
-                : 'text-tertiary hover:text-primary'
+              active === tab.id ? 'text-accent border-b-2 border-accent' : 'text-tertiary hover:text-primary'
             }`}
             role="tab"
             aria-selected={active === tab.id}
           >
             {tab.label}
             {tab.badge !== undefined && tab.badge > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 text-[8px] bg-accent text-page rounded-full">
-                {tab.badge}
-              </span>
+              <span className="ml-1.5 px-1.5 py-0.5 text-[8px] bg-accent text-page rounded-full">{tab.badge}</span>
             )}
           </button>
         ))}

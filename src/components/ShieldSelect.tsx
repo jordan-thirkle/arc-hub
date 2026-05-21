@@ -10,14 +10,14 @@ export function ShieldSelect({ selectedId, onSelect }: ShieldSelectProps) {
 
   return (
     <section className="space-y-2">
-      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">
-        Shield
-      </h2>
+      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Shield</h2>
       <div className="flex gap-1.5">
         <button
           onClick={() => onSelect(undefined)}
           className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
-            !selected ? 'bg-accent text-page border-accent shadow-glow-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
+            !selected
+              ? 'bg-accent text-page border-accent shadow-glow-accent'
+              : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
           }`}
         >
           None
@@ -27,7 +27,9 @@ export function ShieldSelect({ selectedId, onSelect }: ShieldSelectProps) {
             key={s.id}
             onClick={() => onSelect(s.id)}
             className={`flex-1 py-2 min-h-10 text-[10px] font-mono uppercase tracking-[0.1em] border rounded-sm transition-all ${
-              selectedId === s.id ? 'bg-accent text-page border-accent shadow-glow-accent' : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
+              selectedId === s.id
+                ? 'bg-accent text-page border-accent shadow-glow-accent'
+                : 'text-tertiary border-[rgb(var(--border-primary))] hover:text-primary hover:border-tertiary'
             }`}
           >
             {s.name.replace(' Shield', '')}

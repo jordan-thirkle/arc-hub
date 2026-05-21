@@ -44,7 +44,10 @@ export function Logo({ className = '', size = 'md', showText = true }: LogoProps
             fill="none"
           />
           <line
-            x1="24" y1="16" x2="24" y2="32"
+            x1="24"
+            y1="16"
+            x2="24"
+            y2="32"
             stroke="#E8A832"
             strokeWidth="1.5"
             strokeLinecap="round"

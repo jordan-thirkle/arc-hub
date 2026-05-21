@@ -12,28 +12,28 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
   const [expanded, setExpanded] = useState(false);
   const selected = selectedId ? augments.find(a => a.id === selectedId) : null;
 
-  const filtered = shieldId
-    ? augments.filter(a => a.shieldCompatibility.includes(shieldId as ShieldName))
-    : augments;
+  const filtered = shieldId ? augments.filter(a => a.shieldCompatibility.includes(shieldId as ShieldName)) : augments;
 
   const types = ['Combat', 'Looting', 'Tactical', 'Free'] as const;
 
   return (
     <section className="space-y-2">
-      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">
-        Augment
-      </h2>
+      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Augment</h2>
       <button
         onClick={() => setExpanded(!expanded)}
         className={`w-full p-2.5 border text-left rounded-md transition-all ${
-          selected ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]' : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary'
+          selected
+            ? 'border-accent/50 bg-[rgb(var(--bg-elevated))]'
+            : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary'
         }`}
       >
         {selected ? (
           <div>
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-primary">{selected.name}</span>
-              <span className="text-[9px] font-mono text-accent">{selected.tiers[selected.tiers.length - 1]?.tier}</span>
+              <span className="text-[9px] font-mono text-accent">
+                {selected.tiers[selected.tiers.length - 1]?.tier}
+              </span>
             </div>
             <p className="text-[9px] text-tertiary mt-0.5">{selected.type}</p>
           </div>
@@ -57,7 +57,10 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
                   return (
                     <button
                       key={a.id}
-                      onClick={() => { onSelect(isSelected ? undefined : a.id); setExpanded(false); }}
+                      onClick={() => {
+                        onSelect(isSelected ? undefined : a.id);
+                        setExpanded(false);
+                      }}
                       className={`w-full text-left px-3 py-2 border-b border-[rgb(var(--border-primary))] last:border-0 transition-colors hover:bg-[rgb(var(--bg-elevated))] ${
                         isSelected ? 'bg-accent/10' : ''
                       }`}
@@ -74,7 +77,10 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
             );
           })}
           <button
-            onClick={() => { onSelect(undefined); setExpanded(false); }}
+            onClick={() => {
+              onSelect(undefined);
+              setExpanded(false);
+            }}
             className="w-full text-left px-3 py-2 text-xs text-tertiary hover:bg-[rgb(var(--bg-elevated))] transition-colors"
           >
             Clear augment

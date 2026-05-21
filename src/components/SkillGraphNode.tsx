@@ -38,17 +38,24 @@ export const SkillGraphNode = memo(({ data, selected }: SkillGraphNodeProps) => 
         borderLeftWidth: 3,
       }}
     >
-      <Handle type="target" position={Position.Top}
-        style={{ background: branchColor, width: 8, height: 8, border: '2px solid #0A0E14' }} />
+      <Handle
+        type="target"
+        position={Position.Top}
+        style={{ background: branchColor, width: 8, height: 8, border: '2px solid #0A0E14' }}
+      />
 
       <div className="px-2.5 py-1.5">
         <div className="flex items-center justify-between gap-1 mb-0.5">
           <span className="text-[10px] font-semibold text-primary truncate leading-tight">{data.label}</span>
-          <span className={`text-[7px] font-mono px-1 py-[1px] leading-none ${
-            data.recommended === 'S' ? 'text-accent bg-accent/10' :
-            data.recommended === 'F' ? 'text-danger bg-danger/10' :
-            'text-tertiary'
-          }`}>
+          <span
+            className={`text-[7px] font-mono px-1 py-[1px] leading-none ${
+              data.recommended === 'S'
+                ? 'text-accent bg-accent/10'
+                : data.recommended === 'F'
+                  ? 'text-danger bg-danger/10'
+                  : 'text-tertiary'
+            }`}
+          >
             {data.recommended}
           </span>
         </div>
@@ -60,21 +67,36 @@ export const SkillGraphNode = memo(({ data, selected }: SkillGraphNodeProps) => 
         </div>
         <div className="flex items-center justify-between gap-1">
           <button
-            onClick={(e) => { e.stopPropagation(); data.onRemove(data.nodeId); }}
+            onClick={e => {
+              e.stopPropagation();
+              data.onRemove(data.nodeId);
+            }}
             disabled={!data.canRemove}
             className="w-4 h-4 flex items-center justify-center text-[8px] border border-[rgb(var(--border-primary))] text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all leading-none"
-          >-</button>
-          <span className="text-[8px] font-mono text-tertiary">{data.points}/{data.maxPoints}</span>
+          >
+            -
+          </button>
+          <span className="text-[8px] font-mono text-tertiary">
+            {data.points}/{data.maxPoints}
+          </span>
           <button
-            onClick={(e) => { e.stopPropagation(); data.onAdd(data.nodeId); }}
+            onClick={e => {
+              e.stopPropagation();
+              data.onAdd(data.nodeId);
+            }}
             disabled={!data.canAdd}
             className="w-4 h-4 flex items-center justify-center text-[8px] border border-[rgb(var(--border-primary))] text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all leading-none"
-          >+</button>
+          >
+            +
+          </button>
         </div>
       </div>
 
-      <Handle type="source" position={Position.Bottom}
-        style={{ background: branchColor, width: 8, height: 8, border: '2px solid #0A0E14' }} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        style={{ background: branchColor, width: 8, height: 8, border: '2px solid #0A0E14' }}
+      />
     </div>
   );
 });

@@ -22,12 +22,23 @@ export type AttachmentSlot =
   | 'tech-mod';
 
 export type AttachmentType =
-  | 'Silencer' | 'Compensator' | 'Muzzle Brake' | 'Extended Barrel'
-  | 'Shotgun Choke' | 'Shotgun Silencer'
-  | 'Vertical Grip' | 'Angled Grip' | 'Horizontal Grip'
-  | 'Extended Light Mag' | 'Extended Medium Mag' | 'Extended Shotgun Mag'
-  | 'Stable Stock' | 'Lightweight Stock' | 'Padded Stock'
-  | 'Kinetic Converter' | 'Anvil Splitter';
+  | 'Silencer'
+  | 'Compensator'
+  | 'Muzzle Brake'
+  | 'Extended Barrel'
+  | 'Shotgun Choke'
+  | 'Shotgun Silencer'
+  | 'Vertical Grip'
+  | 'Angled Grip'
+  | 'Horizontal Grip'
+  | 'Extended Light Mag'
+  | 'Extended Medium Mag'
+  | 'Extended Shotgun Mag'
+  | 'Stable Stock'
+  | 'Lightweight Stock'
+  | 'Padded Stock'
+  | 'Kinetic Converter'
+  | 'Anvil Splitter';
 
 export type AugmentType = 'Combat' | 'Looting' | 'Tactical' | 'Free';
 
@@ -56,7 +67,16 @@ export type QuickUseCategory = 'Medical' | 'Shield' | 'Stamina' | 'Grenade' | 'U
 
 export type SkillBranch = 'Conditioning' | 'Mobility' | 'Survival';
 
-export type BuildRole = 'Allrounder' | 'PvP Aggressor' | 'PvE Farmer' | 'Stealth' | 'Budget' | 'Boss Killer' | 'CQB' | 'Support' | 'Rat';
+export type BuildRole =
+  | 'Allrounder'
+  | 'PvP Aggressor'
+  | 'PvE Farmer'
+  | 'Stealth'
+  | 'Budget'
+  | 'Boss Killer'
+  | 'CQB'
+  | 'Support'
+  | 'Rat';
 
 export type WeaponTier = 0 | 1 | 2 | 3;
 
@@ -228,7 +248,10 @@ export interface MetaBuild {
   tags: string[];
 }
 
-export const WEAPON_TIER_MULTIPLIERS: Record<WeaponTier, { label: string; magBonus: number; statMult: number; recoilMult: number }> = {
+export const WEAPON_TIER_MULTIPLIERS: Record<
+  WeaponTier,
+  { label: string; magBonus: number; statMult: number; recoilMult: number }
+> = {
   0: { label: 'I', magBonus: 0, statMult: 1.0, recoilMult: 1.0 },
   1: { label: 'II', magBonus: 4, statMult: 1.08, recoilMult: 0.92 },
   2: { label: 'III', magBonus: 8, statMult: 1.15, recoilMult: 0.85 },

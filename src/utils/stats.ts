@@ -5,10 +5,20 @@ export function calculateStats(weapon: Weapon, tier: number, attachments: BuildA
   const base = weapon.tiers[tier];
   if (!base) {
     return {
-      damage: 0, fireRate: 0, range: 0, dps: 0, magSize: 0,
-      verticalRecoil: 0, horizontalRecoil: 0, adsSpeed: 0,
-      reloadSpeed: 0, bulletVelocity: 0, dispersion: 0,
-      agility: 0, stability: 0, stealth: 0,
+      damage: 0,
+      fireRate: 0,
+      range: 0,
+      dps: 0,
+      magSize: 0,
+      verticalRecoil: 0,
+      horizontalRecoil: 0,
+      adsSpeed: 0,
+      reloadSpeed: 0,
+      bulletVelocity: 0,
+      dispersion: 0,
+      agility: 0,
+      stability: 0,
+      stealth: 0,
     };
   }
   const stats: WeaponStat = { ...base.stats };
@@ -47,10 +57,20 @@ export function calculateStats(weapon: Weapon, tier: number, attachments: BuildA
 
 export function statLabel(key: keyof WeaponStat): string {
   const labels: Record<keyof WeaponStat, string> = {
-    damage: 'Damage', fireRate: 'Fire Rate', range: 'Range', dps: 'DPS',
-    magSize: 'Mag Size', verticalRecoil: 'V-Recoil', horizontalRecoil: 'H-Recoil',
-    adsSpeed: 'ADS Speed', reloadSpeed: 'Reload', bulletVelocity: 'Velocity', dispersion: 'Dispersion',
-    agility: 'Agility', stability: 'Stability', stealth: 'Stealth',
+    damage: 'Damage',
+    fireRate: 'Fire Rate',
+    range: 'Range',
+    dps: 'DPS',
+    magSize: 'Mag Size',
+    verticalRecoil: 'V-Recoil',
+    horizontalRecoil: 'H-Recoil',
+    adsSpeed: 'ADS Speed',
+    reloadSpeed: 'Reload',
+    bulletVelocity: 'Velocity',
+    dispersion: 'Dispersion',
+    agility: 'Agility',
+    stability: 'Stability',
+    stealth: 'Stealth',
   };
   return labels[key];
 }
@@ -61,10 +81,20 @@ export function isHigherBetter(key: keyof WeaponStat): boolean {
 
 export function normalizeStat(value: number, key: keyof WeaponStat): number {
   const ranges: Partial<Record<keyof WeaponStat, [number, number]>> = {
-    damage: [0, 100], fireRate: [0, 100], range: [0, 100], dps: [0, 2000],
-    magSize: [0, 60], verticalRecoil: [0, 100], horizontalRecoil: [0, 100],
-    adsSpeed: [0, 100], reloadSpeed: [0, 6], bulletVelocity: [0, 100], dispersion: [0, 100],
-    agility: [0, 100], stability: [0, 100], stealth: [0, 100],
+    damage: [0, 100],
+    fireRate: [0, 100],
+    range: [0, 100],
+    dps: [0, 2000],
+    magSize: [0, 60],
+    verticalRecoil: [0, 100],
+    horizontalRecoil: [0, 100],
+    adsSpeed: [0, 100],
+    reloadSpeed: [0, 6],
+    bulletVelocity: [0, 100],
+    dispersion: [0, 100],
+    agility: [0, 100],
+    stability: [0, 100],
+    stealth: [0, 100],
   };
   const range = ranges[key];
   if (!range) return 50;

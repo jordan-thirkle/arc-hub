@@ -19,3 +19,6 @@ export { Skeleton, CardSkeleton } from './Skeleton';
 export { TTKCalculator } from './TTKCalculator';
 export { ErmalTracker } from './ErmalTracker';
 export { PatchAnalyzer } from './PatchAnalyzer';
+export { ErrorBoundary } from './ErrorBoundary';
+export { Dialog } from './Dialog';
+export { Select } from './Select';

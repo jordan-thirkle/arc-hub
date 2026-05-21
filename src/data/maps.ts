@@ -2,7 +2,11 @@ import type { MapData } from '../types';
 
 export const maps: MapData[] = [
   {
-    id: 'sector-1', name: 'Sector 1: Industrial Zone', difficulty: 1, unlockRound: 1, duration: 30,
+    id: 'sector-1',
+    name: 'Sector 1: Industrial Zone',
+    difficulty: 1,
+    unlockRound: 1,
+    duration: 30,
     conditions: ['Day', 'Clear', 'Mild Radiation'],
     puzzleLoot: 'Containment Key — opens Storage Room B',
     loadoutTips: [
@@ -13,7 +17,11 @@ export const maps: MapData[] = [
     ],
   },
   {
-    id: 'sector-2', name: 'Sector 2: Research Facility', difficulty: 2, unlockRound: 3, duration: 35,
+    id: 'sector-2',
+    name: 'Sector 2: Research Facility',
+    difficulty: 2,
+    unlockRound: 3,
+    duration: 35,
     conditions: ['Day/Night', 'Intermittent Rain', 'Moderate Radiation'],
     puzzleLoot: 'Research Data (sellable), Room 4 access key',
     loadoutTips: [
@@ -24,7 +32,11 @@ export const maps: MapData[] = [
     ],
   },
   {
-    id: 'sector-3', name: 'Sector 3: Abandoned Metro', difficulty: 3, unlockRound: 6, duration: 35,
+    id: 'sector-3',
+    name: 'Sector 3: Abandoned Metro',
+    difficulty: 3,
+    unlockRound: 6,
+    duration: 35,
     conditions: ['Dark', 'Humid', 'Tight Quarters'],
     puzzleLoot: 'Metro Vault Key — contains high-tier loot',
     loadoutTips: [
@@ -35,7 +47,11 @@ export const maps: MapData[] = [
     ],
   },
   {
-    id: 'sector-4', name: 'Sector 4: Corporate HQ', difficulty: 4, unlockRound: 9, duration: 40,
+    id: 'sector-4',
+    name: 'Sector 4: Corporate HQ',
+    difficulty: 4,
+    unlockRound: 9,
+    duration: 40,
     conditions: ['Day/Night', 'Heavy Security', 'Elevated Radiation'],
     puzzleLoot: 'CEO Keycard — executive floor loot room',
     loadoutTips: [
@@ -46,7 +62,11 @@ export const maps: MapData[] = [
     ],
   },
   {
-    id: 'sector-5', name: 'Sector 5: Containment Zone', difficulty: 5, unlockRound: 12, duration: 40,
+    id: 'sector-5',
+    name: 'Sector 5: Containment Zone',
+    difficulty: 5,
+    unlockRound: 12,
+    duration: 40,
     conditions: ['Toxic Atmosphere', 'Extreme Radiation', 'Limited Visibility'],
     puzzleLoot: 'Hazmat Keycard — decontamination vault',
     loadoutTips: [
@@ -57,7 +77,11 @@ export const maps: MapData[] = [
     ],
   },
   {
-    id: 'sector-6', name: 'Sector 6: The Core', difficulty: 5, unlockRound: 16, duration: 45,
+    id: 'sector-6',
+    name: 'Sector 6: The Core',
+    difficulty: 5,
+    unlockRound: 16,
+    duration: 45,
     conditions: ['Volatile', 'Extreme Radiation', 'Boss Spawns'],
     puzzleLoot: 'Core Fragment (quest item), Omega Cache Key',
     loadoutTips: [

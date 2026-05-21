@@ -43,7 +43,5 @@ export function AdUnit({ slot, type = 'carbon', className = '' }: AdUnitProps) {
 
   if (!import.meta.env.VITE_CARBON_SERVE && !import.meta.env.VITE_ETHICALADS_ID) return null;
 
-  return (
-    <div ref={containerRef} className={`ad-unit ${className}`} />
-  );
+  return <div ref={containerRef} className={`ad-unit ${className}`} />;
 }

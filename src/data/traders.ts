@@ -2,7 +2,9 @@ import type { Trader } from '../types';
 
 export const traders: Trader[] = [
   {
-    id: 'haley', name: 'Haley — Quartermaster', currency: 'Credits',
+    id: 'haley',
+    name: 'Haley — Quartermaster',
+    currency: 'Credits',
     inventory: [
       { itemId: 'bandage', price: 50, stockLimit: 20, category: 'Medical' },
       { itemId: 'med-kit-basic', price: 200, stockLimit: 10, category: 'Medical' },
@@ -20,7 +22,9 @@ export const traders: Trader[] = [
     ],
   },
   {
-    id: 'marcus', name: 'Marcus — Tech Specialist', currency: 'Credits + Parts',
+    id: 'marcus',
+    name: 'Marcus — Tech Specialist',
+    currency: 'Credits + Parts',
     inventory: [
       { itemId: 'lockpick', price: 100, stockLimit: 5, category: 'Utility' },
       { itemId: 'data-spike', price: 150, stockLimit: 5, category: 'Utility' },
@@ -31,7 +35,9 @@ export const traders: Trader[] = [
     ],
   },
   {
-    id: 'kuro', name: 'Kuro — Black Market', currency: 'Credits',
+    id: 'kuro',
+    name: 'Kuro — Black Market',
+    currency: 'Credits',
     inventory: [
       { itemId: 'frag-grenade', price: 300, stockLimit: 5, category: 'Grenade' },
       { itemId: 'smoke-grenade', price: 200, stockLimit: 3, category: 'Grenade' },
@@ -42,7 +48,9 @@ export const traders: Trader[] = [
     ],
   },
   {
-    id: 'zara', name: 'Zara — Armorer', currency: 'Credits + Materials',
+    id: 'zara',
+    name: 'Zara — Armorer',
+    currency: 'Credits + Materials',
     inventory: [
       { itemId: 'light-shield', price: 500, stockLimit: 1, category: 'Shield' },
       { itemId: 'medium-shield', price: 1500, stockLimit: 1, category: 'Shield' },
@@ -54,7 +62,9 @@ export const traders: Trader[] = [
     ],
   },
   {
-    id: 'doc', name: 'Doc — Medical Specialist', currency: 'Credits + Medicine',
+    id: 'doc',
+    name: 'Doc — Medical Specialist',
+    currency: 'Credits + Medicine',
     inventory: [
       { itemId: 'med-kit-advanced', price: 800, stockLimit: 5, category: 'Medical' },
       { itemId: 'med-kit-surgical', price: 2000, stockLimit: 2, category: 'Medical' },

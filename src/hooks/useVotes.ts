@@ -20,15 +20,15 @@ export function useVotes(): UseVotesResult {
     const initVotes = async () => {
       setLoading(true);
       try {
-        const { data: { user } } = await sb.auth.getUser();
+        const {
+          data: { user },
+        } = await sb.auth.getUser();
         if (!user) {
           const { data } = await sb.auth.signInAnonymously();
           if (!data.user) return;
         }
 
-        const { data: votes } = await sb
-          .from('votes')
-          .select('build_id, vote_value');
+        const { data: votes } = await sb.from('votes').select('build_id, vote_value');
 
         if (votes) {
           const map: Record<string, VoteValue> = {};
@@ -47,30 +47,34 @@ export function useVotes(): UseVotesResult {
     initVotes();
   }, []);
 
-  const setVote = useCallback(async (buildId: string, value: VoteValue) => {
-    const original = userVotes[buildId] ?? null;
+  const setVote = useCallback(
+    async (buildId: string, value: VoteValue) => {
+      const original = userVotes[buildId] ?? null;
 
-    setUserVotes(prevVotes => ({ ...prevVotes, [buildId]: value }));
+      setUserVotes(prevVotes => ({ ...prevVotes, [buildId]: value }));
 
-    const sb = getSupabase();
-    if (!sb) return;
+      const sb = getSupabase();
+      if (!sb) return;
 
-    try {
-      const { data: { user } } = await sb.auth.getUser();
-      if (!user) return;
+      try {
+        const {
+          data: { user },
+        } = await sb.auth.getUser();
+        if (!user) return;
 
-      if (value === null) {
-        await sb.from('votes').delete().match({ build_id: buildId, user_id: user.id });
-      } else {
-        await sb.from('votes').upsert(
-          { build_id: buildId, user_id: user.id, vote_value: value },
-          { onConflict: 'build_id, user_id' }
-        );
+        if (value === null) {
+          await sb.from('votes').delete().match({ build_id: buildId, user_id: user.id });
+        } else {
+          await sb
+            .from('votes')
+            .upsert({ build_id: buildId, user_id: user.id, vote_value: value }, { onConflict: 'build_id, user_id' });
+        }
+      } catch {
+        setUserVotes(prevVotes => ({ ...prevVotes, [buildId]: original }));
       }
-    } catch {
-      setUserVotes(prevVotes => ({ ...prevVotes, [buildId]: original }));
-    }
-  }, [userVotes]);
+    },
+    [userVotes],
+  );
 
   return { userVotes, setVote, loading };
 }

@@ -45,9 +45,7 @@ export function canDeallocate(nodeId: string, allocation: SkillAllocation): { al
   const current = allocation[nodeId] ?? 0;
   if (current === 0) return { allowed: false, reason: 'No points to remove' };
 
-  const dependentNodes = skillNodes.filter(n =>
-    n.prerequisites.includes(nodeId) && (allocation[n.id] ?? 0) > 0
-  );
+  const dependentNodes = skillNodes.filter(n => n.prerequisites.includes(nodeId) && (allocation[n.id] ?? 0) > 0);
 
   if (dependentNodes.length > 0) {
     return {

@@ -2,7 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { Analytics } from '@vercel/analytics/react';
+import { MotionConfig } from 'framer-motion';
 import * as Sentry from '@sentry/react';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import App from './App';
 import './index.css';
 
@@ -19,8 +21,12 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-      <App />
-      <Analytics />
+      <ErrorBoundary>
+        <MotionConfig reducedMotion="user">
+          <App />
+          <Analytics />
+        </MotionConfig>
+      </ErrorBoundary>
     </HelmetProvider>
   </StrictMode>,
 );

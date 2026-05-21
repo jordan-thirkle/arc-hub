@@ -1,10 +1,20 @@
 import LZString from 'lz-string';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { weapons } from '../src/data/weapons';
 
 function escapeXml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+const FALLBACK_WEAPONS = [
+  { id: 'anvil', name: 'Anvil', tiers: [{ tier: 0, stats: { damage: 40, fireRate: 16.3, dps: 652 } }] },
+  { id: 'kettle', name: 'Kettle', tiers: [{ tier: 0, stats: { damage: 27, fireRate: 12, dps: 324 } }] },
+  { id: 'rattler', name: 'Rattler', tiers: [{ tier: 0, stats: { damage: 22, fireRate: 14, dps: 308 } }] },
+  { id: 'tempest', name: 'Tempest', tiers: [{ tier: 0, stats: { damage: 30, fireRate: 10.5, dps: 315 } }] },
+  { id: 'osprey', name: 'Osprey', tiers: [{ tier: 0, stats: { damage: 38, fireRate: 8.2, dps: 311 } }] },
+  { id: 'venator', name: 'Venator', tiers: [{ tier: 0, stats: { damage: 50, fireRate: 5.5, dps: 275 } }] },
+  { id: 'rascal', name: 'Rascal', tiers: [{ tier: 0, stats: { damage: 100, fireRate: 1.5, dps: 150 } }] },
+  { id: 'canto', name: 'Canto', tiers: [{ tier: 0, stats: { damage: 18, fireRate: 20, dps: 360 } }] },
+];
 
 function makeSvg(params: { primary: string; tier: string; secondary?: string; tier2?: string; damage?: number; dps?: number; fireRate?: number }) {
   const { primary, tier, secondary, tier2, damage, dps, fireRate } = params;
@@ -75,8 +85,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     const secondaryId = data.s;
     const secondaryTier = data.st;
 
-    const primaryWeapon = weapons.find((w: { id: string }) => w.id === primaryId);
-    const secondaryWeapon = secondaryId ? weapons.find((w: { id: string }) => w.id === secondaryId) : undefined;
+    const primaryWeapon = FALLBACK_WEAPONS.find(w => w.id === primaryId);
+    const secondaryWeapon = secondaryId ? FALLBACK_WEAPONS.find(w => w.id === secondaryId) : undefined;
 
     const tierLabels = ['I', 'II', 'III', 'IV'];
     const tierLabel = tierLabels[primaryTier] ?? 'I';

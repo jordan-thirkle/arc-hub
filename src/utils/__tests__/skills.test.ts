@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import {
-  canAllocate, canDeallocate, allocatePoint, deallocatePoint,
-  getTotalPoints, getRecommendedAllocation, getAllocatedNodes, getPointsInBranch,
+  canAllocate,
+  canDeallocate,
+  allocatePoint,
+  deallocatePoint,
+  getTotalPoints,
+  getRecommendedAllocation,
+  getAllocatedNodes,
+  getPointsInBranch,
 } from '../skills';
 import type { SkillAllocation } from '../skills';
 
@@ -100,7 +106,7 @@ describe('getPointsInBranch', () => {
   });
 
   it('returns total points in a specific branch', () => {
-    const allocation: SkillAllocation = { 'sprint-efficiency': 3, 'agile': 2 };
+    const allocation: SkillAllocation = { 'sprint-efficiency': 3, agile: 2 };
     expect(getPointsInBranch(allocation, 'Conditioning')).toBe(3);
     expect(getPointsInBranch(allocation, 'Mobility')).toBe(2);
   });

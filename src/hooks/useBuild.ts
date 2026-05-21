@@ -18,74 +18,98 @@ export function useBuild() {
     createdAt: new Date().toISOString(),
   });
 
-  const setPrimaryWeapon = useCallback((weaponId: string, tier: WeaponTier) => {
-    setBuild(prev => ({
-      ...prev,
-      primaryWeaponId: weaponId,
-      primaryTier: tier,
-      primaryAttachments: prev.primaryAttachments.filter(a =>
-        !a.attachmentId || true
-      ),
-    }));
-  }, [setBuild]);
+  const setPrimaryWeapon = useCallback(
+    (weaponId: string, tier: WeaponTier) => {
+      setBuild(prev => ({
+        ...prev,
+        primaryWeaponId: weaponId,
+        primaryTier: tier,
+        primaryAttachments: prev.primaryAttachments,
+      }));
+    },
+    [setBuild],
+  );
 
-  const setPrimaryTier = useCallback((tier: WeaponTier) => {
-    setBuild(prev => ({ ...prev, primaryTier: tier }));
-  }, [setBuild]);
+  const setPrimaryTier = useCallback(
+    (tier: WeaponTier) => {
+      setBuild(prev => ({ ...prev, primaryTier: tier }));
+    },
+    [setBuild],
+  );
 
-  const setPrimaryAttachment = useCallback((slot: AttachmentSlot, attachmentId: string | null) => {
-    setBuild(prev => {
-      const existing = prev.primaryAttachments.filter(a => a.slot !== slot);
-      const updated: BuildAttachment[] = attachmentId
-        ? [...existing, { slot, attachmentId }]
-        : existing;
-      return { ...prev, primaryAttachments: updated };
-    });
-  }, [setBuild]);
+  const setPrimaryAttachment = useCallback(
+    (slot: AttachmentSlot, attachmentId: string | null) => {
+      setBuild(prev => {
+        const existing = prev.primaryAttachments.filter(a => a.slot !== slot);
+        const updated: BuildAttachment[] = attachmentId ? [...existing, { slot, attachmentId }] : existing;
+        return { ...prev, primaryAttachments: updated };
+      });
+    },
+    [setBuild],
+  );
 
-  const setSecondaryWeapon = useCallback((weaponId: string | undefined, tier?: WeaponTier) => {
-    setBuild(prev => ({
-      ...prev,
-      secondaryWeaponId: weaponId,
-      secondaryTier: tier ?? 0,
-      secondaryAttachments: weaponId ? (prev.secondaryAttachments ?? []) : undefined,
-    }));
-  }, [setBuild]);
+  const setSecondaryWeapon = useCallback(
+    (weaponId: string | undefined, tier?: WeaponTier) => {
+      setBuild(prev => ({
+        ...prev,
+        secondaryWeaponId: weaponId,
+        secondaryTier: tier ?? 0,
+        secondaryAttachments: weaponId ? (prev.secondaryAttachments ?? []) : undefined,
+      }));
+    },
+    [setBuild],
+  );
 
-  const setSecondaryAttachment = useCallback((slot: AttachmentSlot, attachmentId: string | null) => {
-    setBuild(prev => {
-      if (!prev.secondaryWeaponId) return prev;
-      const existing = (prev.secondaryAttachments ?? []).filter(a => a.slot !== slot);
-      const updated: BuildAttachment[] = attachmentId
-        ? [...existing, { slot, attachmentId }]
-        : existing;
-      return { ...prev, secondaryAttachments: updated };
-    });
-  }, [setBuild]);
+  const setSecondaryAttachment = useCallback(
+    (slot: AttachmentSlot, attachmentId: string | null) => {
+      setBuild(prev => {
+        if (!prev.secondaryWeaponId) return prev;
+        const existing = (prev.secondaryAttachments ?? []).filter(a => a.slot !== slot);
+        const updated: BuildAttachment[] = attachmentId ? [...existing, { slot, attachmentId }] : existing;
+        return { ...prev, secondaryAttachments: updated };
+      });
+    },
+    [setBuild],
+  );
 
-  const setAugment = useCallback((augmentId: string | undefined) => {
-    setBuild(prev => ({ ...prev, augmentId }));
-  }, [setBuild]);
+  const setAugment = useCallback(
+    (augmentId: string | undefined) => {
+      setBuild(prev => ({ ...prev, augmentId }));
+    },
+    [setBuild],
+  );
 
-  const setShield = useCallback((shieldId: string | undefined) => {
-    setBuild(prev => ({ ...prev, shieldId }));
-  }, [setBuild]);
+  const setShield = useCallback(
+    (shieldId: string | undefined) => {
+      setBuild(prev => ({ ...prev, shieldId }));
+    },
+    [setBuild],
+  );
 
-  const setQuickUseItem = useCallback((slot: number, itemId: string | null) => {
-    setBuild(prev => {
-      const items = [...prev.quickUseItems];
-      items[slot] = itemId;
-      return { ...prev, quickUseItems: items };
-    });
-  }, [setBuild]);
+  const setQuickUseItem = useCallback(
+    (slot: number, itemId: string | null) => {
+      setBuild(prev => {
+        const items = [...prev.quickUseItems];
+        items[slot] = itemId;
+        return { ...prev, quickUseItems: items };
+      });
+    },
+    [setBuild],
+  );
 
-  const setName = useCallback((name: string) => {
-    setBuild(prev => ({ ...prev, name }));
-  }, [setBuild]);
+  const setName = useCallback(
+    (name: string) => {
+      setBuild(prev => ({ ...prev, name }));
+    },
+    [setBuild],
+  );
 
-  const setNotes = useCallback((notes: string) => {
-    setBuild(prev => ({ ...prev, notes }));
-  }, [setBuild]);
+  const setNotes = useCallback(
+    (notes: string) => {
+      setBuild(prev => ({ ...prev, notes }));
+    },
+    [setBuild],
+  );
 
   const reset = useCallback(() => {
     setBuild({

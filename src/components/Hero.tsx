@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import { ParticleBackground } from './ParticleBackground';
 import { Logo } from './Logo';
 
@@ -10,36 +9,13 @@ interface HeroProps {
 }
 
 export function Hero({ onStartBuilding, onBrowseDatabase, onMetaBuilds }: HeroProps) {
-  const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setMounted(true); }, []);
-
-  if (!mounted) {
-    return (
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-page">
-        <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-      </section>
-    );
-  }
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-page">
-      {/* Layer 1: Base dark gradient */}
       <div className="absolute inset-0 bg-gradient-hero" />
-
-      {/* Layer 2: Animated perspective grid */}
       <div className="hero-grid" />
-
-      {/* Layer 3: Scan line */}
       <div className="hero-scan-line" />
-
-      {/* Layer 4: Noise overlay */}
       <div className="noise-overlay absolute inset-0" style={{ zIndex: 2 }} />
-
-      {/* Layer 5: Floating particles */}
       <ParticleBackground />
-
-      {/* Layer 6: Bottom vignette silhouette */}
       <div
         className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
         style={{
@@ -69,7 +45,6 @@ export function Hero({ onStartBuilding, onBrowseDatabase, onMetaBuilds }: HeroPr
         </svg>
       </div>
 
-      {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
@@ -165,24 +140,34 @@ export function Hero({ onStartBuilding, onBrowseDatabase, onMetaBuilds }: HeroPr
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.0 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-1.5 cursor-pointer"
+        <button
           onClick={onStartBuilding}
+          aria-label="Scroll to planner"
+          className="flex flex-col items-center gap-1.5 cursor-pointer bg-transparent border-none p-0"
         >
-          <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-tertiary">Scroll</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-tertiary">
-            <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.div>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex flex-col items-center gap-1.5"
+          >
+            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-tertiary">Scroll</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-tertiary" aria-hidden="true">
+              <path
+                d="M8 3v10M4 9l4 4 4-4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.div>
+        </button>
       </motion.div>
     </section>
   );

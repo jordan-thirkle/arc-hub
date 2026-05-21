@@ -23,7 +23,13 @@ const BRANCH_COLORS: Record<SkillBranch, string> = {
   Survival: '#03A9F4',
 };
 
-function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
+function SkillNodeCard({
+  nodeId,
+  points,
+  allocation,
+  onAdd,
+  onRemove,
+}: {
   nodeId: string;
   points: number;
   allocation: SkillAllocation;
@@ -38,16 +44,20 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
   const hasPoints = points > 0;
 
   return (
-    <div className={`border p-2 rounded-md transition-all duration-200 ${
-      hasPoints
-        ? 'border-accent/50 bg-[rgb(var(--bg-elevated))] shadow-glow-accent'
-        : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary hover:shadow-sm'
-    }`}>
+    <div
+      className={`border p-2 rounded-md transition-all duration-200 ${
+        hasPoints
+          ? 'border-accent/50 bg-[rgb(var(--bg-elevated))] shadow-glow-accent'
+          : 'border-[rgb(var(--border-primary))] bg-surface hover:border-tertiary hover:shadow-sm'
+      }`}
+    >
       <div className="flex items-center justify-between mb-1">
         <span className="text-[10px] font-semibold text-primary truncate">{node.name}</span>
-        <span className={`text-[8px] font-mono px-1 ${
-          node.recommended === 'S' ? 'text-accent' : node.recommended === 'F' ? 'text-danger' : 'text-tertiary'
-        }`}>
+        <span
+          className={`text-[8px] font-mono px-1 ${
+            node.recommended === 'S' ? 'text-accent' : node.recommended === 'F' ? 'text-danger' : 'text-tertiary'
+          }`}
+        >
           {node.recommended}
         </span>
       </div>
@@ -58,10 +68,15 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
           disabled={!canRemove}
           className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] rounded-sm text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all active:scale-[0.9]"
           aria-label={`Remove point from ${node.name}`}
-        >-</button>
+        >
+          -
+        </button>
         <div className="flex-1 flex gap-0.5">
           {Array.from({ length: node.maxPoints }).map((_, i) => (
-            <div key={i} className={`flex-1 h-1.5 rounded-sm ${i < points ? 'bg-accent' : 'bg-[rgb(var(--stat-bar-bg))]'}`} />
+            <div
+              key={i}
+              className={`flex-1 h-1.5 rounded-sm ${i < points ? 'bg-accent' : 'bg-[rgb(var(--stat-bar-bg))]'}`}
+            />
           ))}
         </div>
         <button
@@ -69,9 +84,13 @@ function SkillNodeCard({ nodeId, points, allocation, onAdd, onRemove }: {
           disabled={!canAdd}
           className="w-5 h-5 flex items-center justify-center text-[10px] border border-[rgb(var(--border-primary))] rounded-sm text-tertiary disabled:opacity-30 hover:bg-[rgb(var(--bg-elevated))] transition-all active:scale-[0.9]"
           aria-label={`Add point to ${node.name}`}
-        >+</button>
+        >
+          +
+        </button>
       </div>
-      <p className="text-[8px] font-mono text-tertiary mt-1">{points}/{node.maxPoints}</p>
+      <p className="text-[8px] font-mono text-tertiary mt-1">
+        {points}/{node.maxPoints}
+      </p>
     </div>
   );
 }
@@ -86,19 +105,21 @@ export function SkillTreeViewer({ allocation, totalPoints, remainingPoints, onAd
         <div className="text-[10px] font-mono">
           <span className="text-primary">{totalPoints}</span>
           <span className="text-tertiary"> / 91 points</span>
-          {remainingPoints > 0 && (
-            <span className="text-accent ml-2">({remainingPoints} remaining)</span>
-          )}
+          {remainingPoints > 0 && <span className="text-accent ml-2">({remainingPoints} remaining)</span>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {branches.map(branch => {
-          const nodes = getNodesByBranch(branch).sort((a, b) => a.gridPosition.row - b.gridPosition.row || a.gridPosition.col - b.gridPosition.col);
+          const nodes = getNodesByBranch(branch).sort(
+            (a, b) => a.gridPosition.row - b.gridPosition.row || a.gridPosition.col - b.gridPosition.col,
+          );
           return (
             <div key={branch} className="space-y-2">
-              <h3 className="text-[10px] font-mono uppercase tracking-[0.1em] flex items-center gap-2"
-                style={{ color: BRANCH_COLORS[branch] }}>
+              <h3
+                className="text-[10px] font-mono uppercase tracking-[0.1em] flex items-center gap-2"
+                style={{ color: BRANCH_COLORS[branch] }}
+              >
                 <span className="w-2 h-2 inline-block" style={{ backgroundColor: BRANCH_COLORS[branch] }} />
                 {BRANCH_LABELS[branch]}
               </h3>

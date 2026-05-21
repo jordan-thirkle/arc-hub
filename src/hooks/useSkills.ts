@@ -1,6 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import { allocatePoint, deallocatePoint, getTotalPoints, canAllocate, canDeallocate, defaultAllocation } from '../utils/skills';
+import {
+  allocatePoint,
+  deallocatePoint,
+  getTotalPoints,
+  canAllocate,
+  canDeallocate,
+  defaultAllocation,
+} from '../utils/skills';
 import type { SkillAllocation } from '../utils/skills';
 
 const MAX_TOTAL_POINTS = 91;
@@ -10,25 +17,37 @@ export function useSkills() {
 
   const totalPoints = useMemo(() => getTotalPoints(allocation), [allocation]);
 
-  const addPoint = useCallback((nodeId: string) => {
-    setAllocation(prev => {
-      if (totalPoints >= MAX_TOTAL_POINTS) return prev;
-      return allocatePoint(nodeId, prev);
-    });
-  }, [setAllocation, totalPoints]);
+  const addPoint = useCallback(
+    (nodeId: string) => {
+      setAllocation(prev => {
+        if (totalPoints >= MAX_TOTAL_POINTS) return prev;
+        return allocatePoint(nodeId, prev);
+      });
+    },
+    [setAllocation, totalPoints],
+  );
 
-  const removePoint = useCallback((nodeId: string) => {
-    setAllocation(prev => deallocatePoint(nodeId, prev));
-  }, [setAllocation]);
+  const removePoint = useCallback(
+    (nodeId: string) => {
+      setAllocation(prev => deallocatePoint(nodeId, prev));
+    },
+    [setAllocation],
+  );
 
-  const canAdd = useCallback((nodeId: string) => {
-    if (totalPoints >= MAX_TOTAL_POINTS) return { allowed: false, reason: 'Max total points reached' };
-    return canAllocate(nodeId, allocation);
-  }, [allocation, totalPoints]);
+  const canAdd = useCallback(
+    (nodeId: string) => {
+      if (totalPoints >= MAX_TOTAL_POINTS) return { allowed: false, reason: 'Max total points reached' };
+      return canAllocate(nodeId, allocation);
+    },
+    [allocation, totalPoints],
+  );
 
-  const canRemove = useCallback((nodeId: string) => {
-    return canDeallocate(nodeId, allocation);
-  }, [allocation]);
+  const canRemove = useCallback(
+    (nodeId: string) => {
+      return canDeallocate(nodeId, allocation);
+    },
+    [allocation],
+  );
 
   const resetSkills = useCallback(() => {
     setAllocation(defaultAllocation());

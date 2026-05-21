@@ -88,36 +88,41 @@ export function useCommunityBuilds(): UseCommunityBuildsResult {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchBuilds();
     }
-    return () => { mountedRef.current = false; };
+    return () => {
+      mountedRef.current = false;
+    };
   }, [fetchBuilds]);
 
-  const submitBuild = useCallback(async (data: Omit<CommunityBuild, 'id' | 'net_votes' | 'official' | 'created_at'>) => {
-    const sb = getSupabase();
-    if (!sb) {
-      const localBuild: CommunityBuild = {
-        ...data,
-        id: Date.now().toString(36),
-        net_votes: 0,
-        official: false,
-        created_at: new Date().toISOString(),
-      };
-      setCommunityBuilds(prev => [localBuild, ...prev]);
-      return;
-    }
-    try {
-      const { error: err } = await sb.from('community_builds').insert({
-        name: data.name,
-        build_json: data.build_json,
-        role: data.role,
-        tags: data.tags,
-        author_username: data.author_username,
-      });
-      if (err) throw err;
-      await fetchBuilds();
-    } catch (e) {
-      throw new Error(e instanceof Error ? e.message : 'Failed to submit build', { cause: e });
-    }
-  }, [fetchBuilds, setCommunityBuilds]);
+  const submitBuild = useCallback(
+    async (data: Omit<CommunityBuild, 'id' | 'net_votes' | 'official' | 'created_at'>) => {
+      const sb = getSupabase();
+      if (!sb) {
+        const localBuild: CommunityBuild = {
+          ...data,
+          id: Date.now().toString(36),
+          net_votes: 0,
+          official: false,
+          created_at: new Date().toISOString(),
+        };
+        setCommunityBuilds(prev => [localBuild, ...prev]);
+        return;
+      }
+      try {
+        const { error: err } = await sb.from('community_builds').insert({
+          name: data.name,
+          build_json: data.build_json,
+          role: data.role,
+          tags: data.tags,
+          author_username: data.author_username,
+        });
+        if (err) throw err;
+        await fetchBuilds();
+      } catch (e) {
+        throw new Error(e instanceof Error ? e.message : 'Failed to submit build', { cause: e });
+      }
+    },
+    [fetchBuilds, setCommunityBuilds],
+  );
 
   const allBuilds: CommunityBuild[] = [...OFFICIAL_BUILDS, ...communityBuilds];
 

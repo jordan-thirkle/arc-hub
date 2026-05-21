@@ -19,7 +19,7 @@ export const TARGET_SHIELD_HP: Record<TargetType, number> = {
 
 export const TARGET_PENETRATION: Record<TargetType, number> = {
   unshielded: 1.0,
-  light: 0.60,
+  light: 0.6,
   medium: 0.55,
   heavy: 0.45,
 };
@@ -51,13 +51,10 @@ export function calculateTTK(
   const dmg = stats.damage <= 0 ? 1 : stats.damage;
 
   const damageThroughPerShot = dmg * penMod;
-  const shieldShots = shieldHp > 0 && damageThroughPerShot > 0
-    ? Math.ceil(shieldHp / damageThroughPerShot)
-    : 0;
+  const shieldShots = shieldHp > 0 && damageThroughPerShot > 0 ? Math.ceil(shieldHp / damageThroughPerShot) : 0;
   const effectiveShieldHp = shieldHp > 0 ? shieldHp : 0;
-  const shieldTtk = shieldHp > 0 && damageThroughPerShot > 0
-    ? (effectiveShieldHp / damageThroughPerShot) * interval
-    : 0;
+  const shieldTtk =
+    shieldHp > 0 && damageThroughPerShot > 0 ? (effectiveShieldHp / damageThroughPerShot) * interval : 0;
 
   const fleshShots = Math.ceil(BASE_TARGET_HP / dmg);
   const fleshTtk = (BASE_TARGET_HP / dmg) * interval;
@@ -79,9 +76,13 @@ export function calculateTTK(
 
 export function getTargetColor(target: TargetType): string {
   switch (target) {
-    case 'unshielded': return '#8BC34A';
-    case 'light': return '#FFC107';
-    case 'medium': return '#FF9800';
-    case 'heavy': return '#F44336';
+    case 'unshielded':
+      return '#8BC34A';
+    case 'light':
+      return '#FFC107';
+    case 'medium':
+      return '#FF9800';
+    case 'heavy':
+      return '#F44336';
   }
 }

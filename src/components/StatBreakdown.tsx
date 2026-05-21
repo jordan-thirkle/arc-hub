@@ -9,7 +9,14 @@ interface StatBreakdownProps {
 }
 
 const primaryKeys: (keyof WeaponStat)[] = ['damage', 'fireRate', 'range', 'dps', 'magSize'];
-const handlingKeys: (keyof WeaponStat)[] = ['verticalRecoil', 'horizontalRecoil', 'adsSpeed', 'reloadSpeed', 'bulletVelocity', 'dispersion'];
+const handlingKeys: (keyof WeaponStat)[] = [
+  'verticalRecoil',
+  'horizontalRecoil',
+  'adsSpeed',
+  'reloadSpeed',
+  'bulletVelocity',
+  'dispersion',
+];
 
 export function StatBreakdown({ weapon, tier, attachments }: StatBreakdownProps) {
   const stats = calculateStats(weapon, tier, attachments);

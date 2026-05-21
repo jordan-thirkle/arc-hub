@@ -52,7 +52,7 @@ export function PatchAnalyzer() {
         return;
       }
       setAnalysis(data.analysis);
-    } catch (err) {
+    } catch {
       setError('Failed to connect to analysis service.');
     } finally {
       setLoading(false);
@@ -94,7 +94,10 @@ export function PatchAnalyzer() {
             <div className="space-y-1">
               <p className="text-[8px] font-mono uppercase tracking-[0.1em] text-tertiary">Weapon Changes</p>
               {analysis.metaShifts.map((shift, i) => (
-                <div key={i} className="flex items-start gap-2 border border-[rgb(var(--border-primary))] bg-surface p-2">
+                <div
+                  key={i}
+                  className="flex items-start gap-2 border border-[rgb(var(--border-primary))] bg-surface p-2"
+                >
                   <span
                     className="text-[7px] font-mono uppercase px-1 py-0.5 mt-0.5 font-bold"
                     style={{ backgroundColor: impactColors[shift.impact], color: '#0A0E14' }}
@@ -116,7 +119,9 @@ export function PatchAnalyzer() {
                 <p className="text-[7px] font-mono uppercase tracking-[0.1em] text-green-400 mb-1">Top Buffs</p>
                 <ul className="space-y-0.5">
                   {analysis.topBuffs.map((w, i) => (
-                    <li key={i} className="text-[8px] text-primary font-mono">{w}</li>
+                    <li key={i} className="text-[8px] text-primary font-mono">
+                      {w}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -126,7 +131,9 @@ export function PatchAnalyzer() {
                 <p className="text-[7px] font-mono uppercase tracking-[0.1em] text-red-400 mb-1">Top Nerfs</p>
                 <ul className="space-y-0.5">
                   {analysis.topNerfs.map((w, i) => (
-                    <li key={i} className="text-[8px] text-primary font-mono">{w}</li>
+                    <li key={i} className="text-[8px] text-primary font-mono">
+                      {w}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -136,7 +143,9 @@ export function PatchAnalyzer() {
                 <p className="text-[7px] font-mono uppercase tracking-[0.1em] text-blue-400 mb-1">New Meta Picks</p>
                 <ul className="space-y-0.5">
                   {analysis.newMetaPicks.map((w, i) => (
-                    <li key={i} className="text-[8px] text-primary font-mono">{w}</li>
+                    <li key={i} className="text-[8px] text-primary font-mono">
+                      {w}
+                    </li>
                   ))}
                 </ul>
               </div>

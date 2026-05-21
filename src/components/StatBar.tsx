@@ -16,10 +16,13 @@ export function StatBar({ label, value, baseValue, pct, better, suffix }: StatBa
       <div className="flex items-center justify-between text-xs">
         <span className="text-secondary">{label}</span>
         <span className="font-mono text-primary">
-          {value}{suffix || ''}
+          {value}
+          {suffix || ''}
           {diff !== 0 && (
             <span className={`ml-1 text-[10px] ${diff > 0 ? 'text-accent' : 'text-danger'}`}>
-              {diff > 0 ? '+' : ''}{diff}{suffix || ''}
+              {diff > 0 ? '+' : ''}
+              {diff}
+              {suffix || ''}
             </span>
           )}
         </span>
