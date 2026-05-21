@@ -28,7 +28,7 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="https://ko-fi.com/YOUR_KOFI_USERNAME"
+                href="https://ko-fi.com/thirkle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[9px] font-mono uppercase tracking-[0.1em] text-tertiary hover:text-accent transition-colors px-2 py-1 border border-border-primary rounded-[2px]"
