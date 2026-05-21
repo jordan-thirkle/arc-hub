@@ -8,7 +8,7 @@ import { shields } from './data/shields';
 import { quickUseItems } from './data/quickuse';
 import { metaBuilds } from './data/metaBuilds';
 import { craftingRecipes } from './data/crafting';
-import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, TTKCalculator, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate, Hero, ErmalTracker } from './components';
+import { Header, WeaponSelector, AttachmentSlots, StatBreakdown, TTKCalculator, AugmentSelect, ShieldSelect, QuickUseSlots, BuildActions, SkillTreeViewer, PatchNotes, AdUnit, GearAffiliate, Hero, ErmalTracker, PatchAnalyzer } from './components';
 
 const WeaponComparison = lazy(() => import('./components/WeaponComparison').then(m => ({ default: m.WeaponComparison })));
 const BuildSubmissionForm = lazy(() => import('./components/BuildSubmissionForm').then(m => ({ default: m.BuildSubmissionForm })));
@@ -401,6 +401,7 @@ export default function App() {
                   { id: 'attachments', label: 'Attachments', badge: attachments.length },
                   { id: 'items', label: 'Items', badge: quickUseItems.length },
                   { id: 'patches', label: 'Patches', badge: patches.length },
+                  { id: 'meta', label: 'Meta', badge: undefined },
                   { id: 'ermal', label: 'Ermal', badge: undefined },
                 ].map(tab => (
                   <button key={tab.id} onClick={() => setDbTab(tab.id)}
@@ -520,6 +521,10 @@ export default function App() {
 
                   {dbTab === 'patches' && (
                     <PatchNotes />
+                  )}
+
+                  {dbTab === 'meta' && (
+                    <PatchAnalyzer />
                   )}
 
                   {dbTab === 'ermal' && (
