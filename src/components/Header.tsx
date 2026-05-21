@@ -26,6 +26,17 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
               <h1 className="font-display font-bold text-accent text-sm tracking-tight leading-none">LOADOUT</h1>
               <p className="text-[8px] text-tertiary font-mono uppercase tracking-[0.15em] leading-tight">PLANNER</p>
             </div>
+            <div className="flex items-center gap-2">
+              <a
+                href="https://ko-fi.com/YOUR_KOFI_USERNAME"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[9px] font-mono uppercase tracking-[0.1em] text-tertiary hover:text-accent transition-colors px-2 py-1 border border-border-primary rounded-[2px]"
+                title="Support on Ko-fi"
+              >
+                &#9749; Ko-fi
+              </a>
+            </div>
           </div>
         </div>
         <nav className="flex gap-0 -mb-px" role="tablist" aria-label="Sections">
