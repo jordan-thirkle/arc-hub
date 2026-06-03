@@ -61,7 +61,7 @@ function makeSvg(params: { primary: string; tier: string; secondary?: string; ti
   <text x="${leftColX + 540 + 200}" y="350" font-family="monospace" font-size="18" font-weight="700" fill="#FF5A00">${dps ?? '-'}</text>
   ` : ''}
 
-  <text x="60" y="570" font-family="monospace" font-size="12" fill="#5A6A7A">arc-raiders-loadout-planner.vercel.app</text>
+  <text x="60" y="570" font-family="monospace" font-size="12" fill="#5A6A7A">arc-hub.vercel.app</text>
   <text x="1140" y="570" font-family="monospace" font-size="12" fill="#5A6A7A" text-anchor="end">Patch 1.29.0</text>
 </svg>`;
 }

@@ -6,7 +6,7 @@ const DIR = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(DIR, '..', 'public', 'guides', 'meta');
 mkdirSync(OUT, { recursive: true });
 
-const APP_URL = 'https://arc-raiders-loadout-planner-seven.vercel.app';
+const APP_URL = 'https://arc-hub.vercel.app';
 
 function h(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 

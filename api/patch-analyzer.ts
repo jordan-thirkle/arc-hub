@@ -73,8 +73,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
-        'HTTP-Referer': 'https://arc-raiders-loadout-planner-seven.vercel.app',
-        'X-Title': 'ARC Raiders Loadout Planner',
+        'HTTP-Referer': 'https://arc-hub.vercel.app',
+        'X-Title': 'ARC Hub',
       },
       body: JSON.stringify({
         model: MODEL,
@@ -92,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(502).json({
         error: 'OpenRouter API error',
         status: response.status,
-        detail: errText,
+        detail: 'Upstream API error — check server logs for details.',
       });
     }
 
@@ -108,6 +108,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({ analysis, usage, raw: content });
   } catch (err) {
-    return res.status(500).json({ error: 'Internal error', detail: String(err) });
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return res.status(500).json({ error: 'Internal error', detail: message });
   }
 }

@@ -12,7 +12,7 @@ export function Logo({ className = '', size = 'md', showText = true }: LogoProps
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="relative flex-shrink-0">
-        <svg width={iconSize} height={iconSize} viewBox="0 0 48 48" fill="none" aria-label="Loadout Planner logo">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 48 48" fill="none" aria-label="ARC Hub logo">
           <defs>
             <radialGradient id="logo-glow" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#E8A832" stopOpacity="0.2" />

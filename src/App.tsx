@@ -211,8 +211,8 @@ export default function App() {
   return (
     <>
       <Helmet>
-        <title>ARC Raiders Loadout Planner — Plan. Optimize. Extract.</title>
-        <meta property="og:title" content="ARC Raiders Loadout Planner" />
+        <title>ARC Hub — Community Hub for ARC Raiders</title>
+        <meta property="og:title" content="ARC Hub — Community Hub for ARC Raiders" />
         <meta
           property="og:description"
           content="Interactive weapon loadout planner for Arc Raiders. Browse weapons, attachments, augments, shields, skill tree, and crafting."
@@ -1058,7 +1058,7 @@ export default function App() {
             <AdUnit slot="arc-footer" type="carbon" />
           </div>
           <p className="text-[9px] text-tertiary font-mono uppercase tracking-[0.1em]">
-            ARC Raiders Loadout Planner — Community tool. Not affiliated with Embark Studios.
+            ARC Hub — Community tool. Not affiliated with Embark Studios.
           </p>
           <p className="text-[8px] text-tertiary mt-1">
             Weapon &amp; shield data from{' '}

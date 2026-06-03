@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# ARC Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Community hub for everything ARC Raiders: loadout planner, weapon database, build guides, patch analysis, daily meta briefing, and community builds.
 
-Currently, two official plugins are available:
+**Stack:** React 19 + TypeScript 6 + Vite 8 + Tailwind CSS 4 + Framer Motion\
+**Deploy:** Vercel (serverless + static)\
+**AI:** DeepSeek V4 Flash via OpenRouter
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Interactive loadout planner (23 weapons, 4 tiers, 17 attachments, augments, shields, quick-use)
+- Weapon comparison with stat deltas
+- 44-node skill tree viewer with prerequisite validation
+- Community build sharing + voting (Supabase)
+- AI-powered patch notes analyzer
+- Daily meta briefing endpoint (`/api/discord/daily`)
+- Crafting calculator with material summaries
+- 8 weapon-specific guides + 10 role-based meta guides
+- Dark industrial sci-fi theme
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## API Endpoints
 
-## Expanding the ESLint configuration
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/api/weapons` | GET | Full weapon data |
+| `/api/og` | GET | Open Graph image (build URL) |
+| `/api/patch-analyzer` | POST | AI patch note analysis |
+| `/api/discord/daily` | GET | Daily meta briefing (JSON) |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Daily Briefing
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+GET /api/discord/daily
+GET /api/discord/daily?post=discord   # Also pushes to Discord webhook
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Requires `OPENROUTER_API_KEY` env var. Optional `DISCORD_WEBHOOK_URL` for auto-posting.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Local Dev
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev     # Vite dev server
+npm run build   # TypeScript + Vite build
+npm run test    # Vitest
+npm run lint    # ESLint
 ```
+
+## Environment
+
+| Var | Required | Description |
+|-----|----------|-------------|
+| `VITE_SUPABASE_URL` | No | Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | No | Supabase anon key |
+| `OPENROUTER_API_KEY` | For AI features | OpenRouter API key |
+| `DISCORD_WEBHOOK_URL` | No | Discord webhook for daily briefing |
+
+Not affiliated with Embark Studios.

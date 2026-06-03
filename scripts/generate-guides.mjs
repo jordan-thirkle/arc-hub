@@ -7,7 +7,7 @@ const DIR = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(DIR, '..', 'public', 'guides');
 mkdirSync(OUT, { recursive: true });
 
-const APP_URL = 'https://arc-raiders-loadout-planner-seven.vercel.app';
+const APP_URL = 'https://arc-hub.vercel.app';
 
 function encode(str) { return LZString.compressToEncodedURIComponent(str); }
 function buildUrl(w, wt, wa, a, sh, q) {
