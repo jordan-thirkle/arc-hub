@@ -5,7 +5,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-rattler-pvp',
     name: 'Rattler PvP Meta',
     role: 'PvP Aggressor',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'The definitive PvP build. Rattler III with vertical grip for recoil control and stable stock for ADS speed. Medium shield + Pressure Regulator Mk.2 for combat sustain.',
     build: {
@@ -20,7 +20,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'pressure-regulator',
       shieldId: 'medium-shield',
       quickUseItems: ['stim-shot', 'shield-cell', 'shield-cell', 'frag-grenade', 'bandage'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Aggressive playstyle. Close-mid range domination.',
     },
     rating: 4.8,
@@ -32,7 +32,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-tempest-farmer',
     name: 'Tempest PvE Farmer',
     role: 'PvE Farmer',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Max efficiency loot farmer. Tempest II with extended medium mag and padded stock. Scanner augment to find loot faster. Light shield for mobility.',
     build: {
@@ -47,7 +47,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'scanner',
       shieldId: 'light-shield',
       quickUseItems: ['med-kit-advanced', 'shield-cell', 'lockpick', 'lockpick', 'energy-drink'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Solo farmer. Prioritize loot over combat.',
     },
     rating: 4.6,
@@ -59,7 +59,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-osprey-sniper',
     name: 'Osprey Stealth Sniper',
     role: 'Stealth',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Stay hidden, take precise shots. Osprey IV with silencer, angled grip, stable stock. Signal Jammer augment to avoid detection.',
     build: {
@@ -81,7 +81,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'signal-jammer',
       shieldId: 'light-shield',
       quickUseItems: ['stim-shot', 'painkiller', 'flashbang', 'smoke-grenade', 'bandage'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Rat playstyle. Third-party engagements.',
     },
     rating: 4.5,
@@ -93,7 +93,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-kettle-budget',
     name: 'Kettle Budget Build',
     role: 'Budget',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Cheapest viable loadout. Kettle I with nothing but a vertical grip. No shield, no augment. High reward for low risk.',
     build: {
@@ -102,7 +102,7 @@ export const metaBuilds: MetaBuild[] = [
       primaryTier: 0,
       primaryAttachments: [{ slot: 'underbarrel', attachmentId: 'vertical-grip' }],
       quickUseItems: ['bandage', 'energy-drink'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Entry level. Bankrupt recover build.',
     },
     rating: 4.2,
@@ -114,7 +114,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-ferro-boss',
     name: 'Ferro Boss Killer',
     role: 'Boss Killer',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Ferro IV hits like a truck. Extended barrel for max damage range. Heavy shield + Vital Booster Mk.2 for tankiness.',
     build: {
@@ -132,7 +132,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'vital-booster',
       shieldId: 'heavy-shield',
       quickUseItems: ['med-kit-surgical', 'stim-shot', 'adrenaline-shot', 'frag-grenade', 'repair-kit'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Boss hunting squad build.',
     },
     rating: 4.7,
@@ -144,7 +144,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-canto-cqb',
     name: 'Canto CQB Rush',
     role: 'CQB',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Canto II with muzzle brake and horizontal grip. Max fire rate CQB monster. Light shield + Kinetic Capacitor.',
     build: {
@@ -160,7 +160,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'kinetic-capacitor',
       shieldId: 'light-shield',
       quickUseItems: ['stim-shot', 'shield-cell', 'frag-grenade', 'flashbang', 'bandage'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Close range dominance. High risk, high reward.',
     },
     rating: 4.4,
@@ -172,7 +172,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-anvil-support',
     name: 'Anvil Support Build',
     role: 'Support',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Anvil with Anvil Splitter tech mod + Kinetic Converter. Provides covering fire and breaching utility. Trauma Kit augment for team revives.',
     build: {
@@ -186,7 +186,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'trauma-kit',
       shieldId: 'medium-shield',
       quickUseItems: ['med-kit-surgical', 'bandage', 'bandage', 'smoke-grenade', 'flare'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Squad medic support.',
     },
     rating: 4.3,
@@ -198,7 +198,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-bobcat-rat',
     name: 'Bobcat Zero-to-Hero',
     role: 'Rat',
-    patch: '1.26',
+    patch: '1.29',
     description: 'Ultra budget rat build. Bobcat I with nothing attached. No shield. Sneak in, grab loot, extract.',
     build: {
       name: 'Bobcat Zero-to-Hero',
@@ -206,7 +206,7 @@ export const metaBuilds: MetaBuild[] = [
       primaryTier: 0,
       primaryAttachments: [],
       quickUseItems: ['bandage', 'energy-drink', 'lockpick'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'True rat run. Abandon all gear fear.',
     },
     rating: 4.0,
@@ -218,7 +218,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-torrente-suppression',
     name: 'Torrente Suppression',
     role: 'PvP Aggressor',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Torrente IV with extended mag and muzzle brake. Lays down suppressive fire. Heavy shield + Focus augment for ADS accuracy.',
     build: {
@@ -233,7 +233,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'focus',
       shieldId: 'heavy-shield',
       quickUseItems: ['med-kit-advanced', 'shield-pack', 'shield-pack', 'frag-grenade', 'energy-drink'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Anchor for squad pushes.',
     },
     rating: 4.1,
@@ -245,7 +245,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-aphelion-allrounder',
     name: 'Aphelion Allrounder',
     role: 'Allrounder',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Aphelion III with stable stock. Versatile for any situation. Breacher augment for locked rooms. Medium shield.',
     build: {
@@ -262,7 +262,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'breacher',
       shieldId: 'medium-shield',
       quickUseItems: ['med-kit-advanced', 'shield-cell', 'lockpick', 'data-spike', 'frag-grenade'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Well-rounded solo build.',
     },
     rating: 4.5,
@@ -274,7 +274,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-iltoro-cqb',
     name: 'Il Toro Room Clearer',
     role: 'CQB',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Il Toro with shotgun choke and extended tube. Devastating in CQB. Space Synthesizer for extra loot space.',
     build: {
@@ -295,7 +295,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'space-synthesizer',
       shieldId: 'medium-shield',
       quickUseItems: ['med-kit-advanced', 'shield-cell', 'incendiary-grenade', 'lockpick', 'bandage'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'CQB looting hybrid.',
     },
     rating: 4.3,
@@ -307,7 +307,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-equalizer-endgame',
     name: 'Equalizer Endgame',
     role: 'Boss Killer',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Legendary Equalizer with Hazard Module Mk.3 for Sector 6. Full endgame kit. Heavy shield. Max survivability.',
     build: {
@@ -321,7 +321,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'hazard-module',
       shieldId: 'heavy-shield',
       quickUseItems: ['med-kit-surgical', 'med-kit-surgical', 'shield-overcharge', 'adrenaline-shot', 'antidote'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Full endgame kit. Sector 6 ready.',
     },
     rating: 4.9,
@@ -333,7 +333,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-vulcano-hybrid',
     name: 'Vulcano Hybrid Farmer',
     role: 'PvE Farmer',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Semi-auto shotgun + pistol sidearm for efficient PvE clearing. Weight Converter augment for max loot.',
     build: {
@@ -351,7 +351,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'weight-converter',
       shieldId: 'light-shield',
       quickUseItems: ['med-kit-advanced', 'shield-cell', 'lockpick', 'lockpick', 'energy-drink'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Max loot capacity farming.',
     },
     rating: 4.1,
@@ -363,7 +363,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-stitcher-stealth',
     name: 'Stitcher Stealth Scout',
     role: 'Stealth',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Silenced Stitcher with nimble handling for sneaky flanks. Drop Pod Beacon for supply drops. Stay mobile, stay quiet.',
     build: {
@@ -379,7 +379,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'drop-pod-beacon',
       shieldId: 'light-shield',
       quickUseItems: ['stim-shot', 'smoke-grenade', 'flashbang', 'sonic-trap', 'binoculars'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Scout + loot denial.',
     },
     rating: 4.0,
@@ -391,7 +391,7 @@ export const metaBuilds: MetaBuild[] = [
     id: 'meta-arpeggio-midrange',
     name: 'Arpeggio Mid-Range Anchor',
     role: 'Allrounder',
-    patch: '1.26',
+    patch: '1.29',
     description:
       'Arpeggio IV burst-fire AR for mid-range dominance. Armory Converter for extra weapon slot. Balanced shield choice.',
     build: {
@@ -410,7 +410,7 @@ export const metaBuilds: MetaBuild[] = [
       augmentId: 'armory-converter',
       shieldId: 'medium-shield',
       quickUseItems: ['med-kit-advanced', 'shield-cell', 'shield-cell', 'frag-grenade', 'flare-tactical'],
-      patch: '1.26',
+      patch: '1.29',
       notes: 'Flexible squad anchor build.',
     },
     rating: 4.4,

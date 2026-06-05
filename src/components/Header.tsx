@@ -5,7 +5,7 @@ interface HeaderProps {
 }
 
 const tabs = [
-  { id: 'planner', label: 'Planner' },
+  { id: 'planner', label: 'Gear Up' },
   { id: 'builds', label: 'Builds' },
   { id: 'database', label: 'Database' },
   { id: 'skills', label: 'Skills' },
@@ -43,8 +43,8 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
               />
             </svg>
             <div>
-              <h1 className="font-display font-bold text-accent text-sm tracking-tight leading-none">LOADOUT</h1>
-              <p className="text-[8px] text-tertiary font-mono uppercase tracking-[0.15em] leading-tight">PLANNER</p>
+              <h1 className="font-display font-bold text-accent text-sm tracking-tight leading-none">ARC</h1>
+              <p className="text-[8px] text-tertiary font-mono uppercase tracking-[0.15em] leading-tight">HUB</p>
             </div>
             <div className="flex items-center gap-2">
               <a
@@ -59,12 +59,12 @@ export function Header({ activeTab, onTabChange, savedCount = 0 }: HeaderProps) 
             </div>
           </div>
         </div>
-        <nav className="flex gap-0 -mb-px" role="tablist" aria-label="Sections">
+        <nav className="flex gap-0 -mb-px overflow-x-auto" role="tablist" aria-label="Sections">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all duration-200 rounded-t-sm ${
+              className={`px-2 sm:px-4 py-2 text-[10px] font-mono uppercase tracking-[0.1em] border-b-2 transition-all duration-200 rounded-t-sm whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'text-accent border-accent'
                   : 'text-tertiary border-transparent hover:text-primary hover:border-tertiary'

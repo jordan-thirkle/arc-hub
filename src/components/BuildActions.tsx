@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getShareUrl } from '../utils/buildUrl';
+import { showToast } from './Toast';
 import type { Build } from '../types';
 
 interface BuildActionsProps {
@@ -21,6 +22,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
     const url = getShareUrl(build);
     try {
       await navigator.clipboard.writeText(url);
+      showToast('Loadout URL copied to clipboard!', 'success');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -30,6 +32,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
       input.select();
       document.execCommand('copy');
       document.body.removeChild(input);
+      showToast('Loadout URL copied to clipboard!', 'success');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -38,6 +41,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
   const handleSave = () => {
     if (!saveName.trim()) return;
     onSave(saveName.trim());
+    showToast(`Loadout "${saveName.trim()}" saved!`, 'success');
     setSaveName('');
     setShowSave(false);
   };
@@ -46,7 +50,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
 
   return (
     <section className="space-y-3">
-      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Build Actions</h2>
+      <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Loadout Actions</h2>
       <div className="space-y-2">
         <div className="flex flex-wrap gap-1.5">
           <button
@@ -98,7 +102,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
               value={saveName}
               onChange={e => setSaveName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              placeholder="Build name..."
+              placeholder="Name your loadout..."
               className="flex-1 px-3 py-1.5 text-xs bg-[rgb(var(--bg-elevated))] border border-[rgb(var(--border-primary))] text-primary placeholder:text-tertiary rounded-md focus-ring"
               autoFocus
             />
@@ -115,7 +119,7 @@ export function BuildActions({ build, onSave, savedBuilds, onLoadBuild, onDelete
         {showSaved && (
           <div className="border border-[rgb(var(--border-primary))] bg-surface max-h-48 overflow-y-auto rounded-md shadow-card">
             {savedBuilds.length === 0 ? (
-              <p className="p-3 text-xs text-tertiary text-center">No saved builds yet</p>
+              <p className="p-3 text-xs text-tertiary text-center">No loadouts saved yet</p>
             ) : (
               savedBuilds.map(b => (
                 <div

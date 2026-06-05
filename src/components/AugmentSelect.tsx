@@ -38,7 +38,7 @@ export function AugmentSelect({ selectedId, shieldId, onSelect }: AugmentSelectP
             <p className="text-[9px] text-tertiary mt-0.5">{selected.type}</p>
           </div>
         ) : (
-          <p className="text-xs text-tertiary">No augment</p>
+          <p className="text-xs text-tertiary">Empty Augment Slot</p>
         )}
       </button>
 

@@ -148,7 +148,7 @@ export const attachments: Attachment[] = [
     tier: 2,
     slot: 'shotgun-muzzle',
     type: 'Shotgun Choke',
-    compatibleWith: ['iltoro', 'vulcano'],
+    compatibleWith: ['il-toro', 'vulcano'],
     effects: { dispersion: -1.5, range: 5 },
     description: 'Tightens pellet spread. Increases effective range.',
     crafting: {

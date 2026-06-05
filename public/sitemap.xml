@@ -1,101 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://arc-hub.vercel.app/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/kettle/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/kettle/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/rattler/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/rattler/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/tempest/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/tempest/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/osprey/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/osprey/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/venator/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/venator/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/rascal/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/rascal/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/anvil/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/anvil/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/pvp-aggressor/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/pvp-aggressor/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/pve-farmer/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/pve-farmer/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/stealth/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/stealth/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/budget/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/budget/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/boss-killer/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/boss-killer/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/cqb/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/cqb/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/new-player/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/new-player/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/endgame/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/endgame/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/solo/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/solo/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arc-hub.vercel.app/guides/meta/support/</loc>
+    <loc>https://arc-hub-jordanthirkles-projects.vercel.app/guides/meta/support/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

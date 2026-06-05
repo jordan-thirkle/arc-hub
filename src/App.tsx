@@ -46,6 +46,7 @@ import { calculateMaterialsForItems } from './utils/crafting';
 import { getRecommendedAllocation } from './utils/skills';
 import { patches, latestPatch } from './data/patches';
 import type { Build, WeaponTier, BuildRole } from './types';
+import { Toast, showToast } from './components/Toast';
 import { AMMO_COLORS, SLOT_LABELS } from './types';
 
 const tabVariants = {
@@ -77,6 +78,7 @@ export default function App() {
   const [savedBuilds, setSavedBuilds] = useLocalStorage<Build[]>('ar-saved-builds', []);
 
   const [dbTab, setDbTab] = useState('weapons');
+  const [weaponSearch, setWeaponSearch] = useState('');
   const [buildRole, setBuildRole] = useState<BuildRole | 'all'>('all');
   const [buildSort, setBuildSort] = useState<'rating' | 'votes' | 'newest'>('rating');
   const [craftQueue, setCraftQueue] = useState<string[]>([]);
@@ -122,6 +124,20 @@ export default function App() {
   const selectedAugment = build.augmentId ? augments.find(a => a.id === build.augmentId) : undefined;
   const selectedShield = build.shieldId ? shields.find(s => s.id === build.shieldId) : undefined;
 
+  const primaryWeight = primaryWeapon ? primaryWeapon.tiers[build.primaryTier]?.weight ?? 0 : 0;
+  const secondaryWeight = secondaryWeapon && build.secondaryTier !== undefined ? secondaryWeapon.tiers[build.secondaryTier]?.weight ?? 0 : 0;
+  const shieldWeight = selectedShield ? selectedShield.weight : 0;
+  const quickUseWeight = build.quickUseItems.reduce((sum, id) => {
+    if (!id) return sum;
+    const item = quickUseItems.find(q => q.id === id);
+    return sum + (item?.weight ?? 0);
+  }, 0);
+  const totalWeight = primaryWeight + secondaryWeight + shieldWeight + quickUseWeight;
+
+  const primaryCost = primaryWeapon ? primaryWeapon.tiers[build.primaryTier]?.value ?? 0 : 0;
+  const secondaryCost = secondaryWeapon && build.secondaryTier !== undefined ? secondaryWeapon.tiers[build.secondaryTier]?.value ?? 0 : 0;
+  const totalCost = primaryCost + secondaryCost;
+
   const handleSave = useCallback(
     (name: string) => {
       const newBuild: Build = { ...build, id: generateId(), createdAt: new Date().toISOString(), name };
@@ -141,6 +157,30 @@ export default function App() {
       if (saved.augmentId) setAugment(saved.augmentId);
       if (saved.shieldId) setShield(saved.shieldId);
       saved.quickUseItems.forEach((id, i) => setQuickUseItem(i, id));
+      setActiveTab('planner');
+    },
+    [
+      setPrimaryWeapon,
+      setPrimaryAttachment,
+      setSecondaryWeapon,
+      setSecondaryAttachment,
+      setAugment,
+      setShield,
+      setQuickUseItem,
+    ],
+  );
+
+  const handleLoadMetaBuild = useCallback(
+    (buildData: Omit<Build, 'id' | 'createdAt'>) => {
+      setPrimaryWeapon(buildData.primaryWeaponId, buildData.primaryTier);
+      for (const att of buildData.primaryAttachments) setPrimaryAttachment(att.slot, att.attachmentId);
+      if (buildData.secondaryWeaponId) {
+        setSecondaryWeapon(buildData.secondaryWeaponId, buildData.secondaryTier);
+        for (const att of buildData.secondaryAttachments ?? []) setSecondaryAttachment(att.slot, att.attachmentId);
+      }
+      if (buildData.augmentId) setAugment(buildData.augmentId);
+      if (buildData.shieldId) setShield(buildData.shieldId);
+      buildData.quickUseItems.forEach((id, i) => setQuickUseItem(i, id));
       setActiveTab('planner');
     },
     [
@@ -219,7 +259,7 @@ export default function App() {
         />
         <meta
           name="description"
-          content="Plan, optimize, and share Arc Raiders weapon loadouts. Interactive build planner with real-time stats and shareable build URLs."
+          content="ARC Hub — your community hub for everything ARC Raiders: loadout planner, weapon database, build guides, patch analysis, daily meta briefings, crafting calculator, and community builds."
         />
         <meta property="og:image" content={ogImageUrl} />
         <meta property="og:image:width" content="1200" />
@@ -249,8 +289,11 @@ export default function App() {
               >
                 <div className="flex items-center justify-between pb-4 border-b border-[rgb(var(--border-primary))]">
                   <div>
-                    <h2 className="text-sm font-display font-bold text-accent tracking-tight">BUILDER</h2>
-                    <p className="text-[10px] text-tertiary font-mono">Configure your loadout</p>
+                    <h2 className="text-sm font-display font-bold text-accent tracking-tight">GEAR UP</h2>
+                    <p className="text-[10px] text-tertiary font-mono">Prepare for deployment</p>
+                    <p className="text-[9px] font-mono text-tertiary uppercase tracking-[0.15em] mt-1">
+                      Raider // Callsign: <span className="text-accent">THIRKLE-7</span>
+                    </p>
                   </div>
                   <button
                     onClick={() => setShowComparison(p => !p)}
@@ -258,7 +301,7 @@ export default function App() {
                     showComparison ? 'bg-accent text-page border-accent' : 'border-[rgb(var(--border-primary))] text-tertiary hover:text-primary'
                   }"
                   >
-                    {showComparison ? 'Close Compare' : 'Compare Weapons'}
+                    {showComparison ? 'Close Compare' : 'Weapon Compare'}
                   </button>
                 </div>
 
@@ -286,7 +329,7 @@ export default function App() {
                       onClick={() => setSecondaryWeapon(undefined)}
                       className="w-full py-2 text-[9px] font-mono uppercase tracking-[0.1em] border border-[rgb(var(--border-primary))] text-tertiary hover:text-primary transition-all"
                     >
-                      Clear Secondary
+                      Unequip Secondary
                     </button>
                   </div>
 
@@ -298,7 +341,7 @@ export default function App() {
                           slots={primaryWeapon.attachmentSlots}
                           attachments={build.primaryAttachments}
                           onEquip={setPrimaryAttachment}
-                          label="Primary Attachments"
+                          label="Primary Mods"
                         />
 
                         {secondaryWeapon && (
@@ -307,7 +350,7 @@ export default function App() {
                             slots={secondaryWeapon.attachmentSlots}
                             attachments={build.secondaryAttachments ?? []}
                             onEquip={setSecondaryAttachment}
-                            label="Secondary Attachments"
+                            label="Secondary Mods"
                           />
                         )}
 
@@ -316,21 +359,21 @@ export default function App() {
                           <ShieldSelect selectedId={build.shieldId} onSelect={setShield} />
                           <div className="space-y-1">
                             <p className="text-[10px] font-mono uppercase tracking-[0.15em] text-secondary font-semibold">
-                              Build Info
+                              Loadout Summary
                             </p>
                             <div className="p-2 border border-[rgb(var(--border-primary))] bg-surface space-y-1.5">
                               <input
                                 type="text"
                                 value={build.name}
                                 onChange={e => setName(e.target.value)}
-                                placeholder="Build name..."
+                                placeholder="Name your loadout..."
                                 className="w-full px-2 py-1 text-[10px] bg-[rgb(var(--bg-elevated))] border border-[rgb(var(--border-primary))] text-primary placeholder:text-tertiary focus:outline-none focus:border-accent"
                               />
                               <textarea
                                 value={build.notes ?? ''}
                                 onChange={e => setNotes(e.target.value)}
                                 rows={2}
-                                placeholder="Notes..."
+                                placeholder="Mission notes..."
                                 className="w-full px-2 py-1 text-[9px] bg-[rgb(var(--bg-elevated))] border border-[rgb(var(--border-primary))] text-primary placeholder:text-tertiary focus:outline-none focus:border-accent resize-none"
                               />
                               <p className="text-[9px] text-tertiary">
@@ -373,6 +416,26 @@ export default function App() {
                                   {latestPatch.version}
                                 </button>
                               </p>
+                              <div className="pt-1.5 mt-1.5 border-t border-[rgb(var(--border-primary))]">
+                                <p className="text-[9px] text-tertiary">
+                                  Total Weight:{' '}
+                                  <span className="text-accent font-mono">{totalWeight.toFixed(1)}kg</span>
+                                </p>
+                                <p className="text-[9px] text-tertiary">
+                                  Total Cost:{' '}
+                                  <span className="text-accent font-mono">{totalCost.toLocaleString()}c</span>
+                                </p>
+                                {(() => {
+                                  const weightClass = totalWeight <= 8 ? 'Light' : totalWeight <= 14 ? 'Medium' : totalWeight > 14 ? 'Heavy' : 'Overencumbered';
+                                  const weightColor = totalWeight <= 8 ? 'text-accent-green' : totalWeight <= 14 ? 'text-accent-warning' : 'text-danger';
+                                  return (
+                                    <p className="text-[9px] font-mono text-tertiary">
+                                      Class: <span className={`${weightColor} font-semibold`}>{weightClass}</span>
+                                      {totalWeight > 20 && <span className="text-danger ml-1">SLOW</span>}
+                                    </p>
+                                  );
+                                })()}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -395,7 +458,7 @@ export default function App() {
                       <div className="flex items-center justify-center h-48 border border-dashed border-[rgb(var(--border-primary))] bg-surface">
                         <div className="text-center">
                           <p className="text-xs text-tertiary font-mono uppercase tracking-[0.1em]">
-                            Select a weapon to begin
+                            Equip a weapon to plan your deployment
                           </p>
                           <p className="text-[10px] text-tertiary mt-1">{weaponCount} weapons across 9 classes</p>
                         </div>
@@ -519,6 +582,12 @@ export default function App() {
                                 </span>
                               ))}
                             </div>
+                            <button
+                              onClick={() => handleLoadMetaBuild(mb.build)}
+                              className="mt-2 w-full py-1 text-[8px] font-mono uppercase tracking-[0.1em] border border-accent/50 text-accent hover:bg-accent/10 transition-all rounded-sm"
+                            >
+                              Load in Planner
+                            </button>
                           </div>
                         );
                       })}
@@ -657,6 +726,18 @@ export default function App() {
                                 </span>
                               ))}
                             </div>
+                            {buildData.primaryWeaponId && (
+                              <button
+                                onClick={() => {
+                                  setPrimaryWeapon(buildData.primaryWeaponId!, (buildData.primaryTier ?? 0) as WeaponTier);
+                                  setActiveTab('planner');
+                                  showToast(`Loaded "${cb.name}" in planner`, 'success');
+                                }}
+                                className="mt-2 w-full py-1 text-[8px] font-mono uppercase tracking-[0.1em] border border-accent/50 text-accent hover:bg-accent/10 transition-all rounded-sm"
+                              >
+                                Load in Planner
+                              </button>
+                            )}
                           </div>
                         );
                       })}
@@ -693,7 +774,10 @@ export default function App() {
                 exit="exit"
                 className="space-y-6"
               >
-                <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Database</h2>
+                <div>
+                  <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">Requisition Database</h2>
+                  <p className="text-[10px] text-tertiary font-mono">Review available requisitions and field data</p>
+                </div>
                 <div className="flex gap-0 border-b border-[rgb(var(--border-primary))]" role="tablist">
                   {[
                     { id: 'weapons', label: 'Weapons', badge: weapons.length },
@@ -724,6 +808,15 @@ export default function App() {
                   <div className="space-y-4">
                     {dbTab === 'weapons' && (
                       <div className="overflow-x-auto">
+                        <div className="mb-2">
+                          <input
+                            type="text"
+                            value={weaponSearch}
+                            onChange={e => setWeaponSearch(e.target.value)}
+                            placeholder="Search weapons..."
+                            className="w-full px-3 py-1.5 text-[10px] bg-[rgb(var(--bg-elevated))] border border-[rgb(var(--border-primary))] text-primary placeholder:text-tertiary focus:outline-none focus:border-accent font-mono"
+                          />
+                        </div>
                         <table className="w-full text-[10px] font-mono">
                           <thead>
                             <tr className="text-tertiary uppercase tracking-[0.1em] border-b border-[rgb(var(--border-primary))]">
@@ -739,7 +832,14 @@ export default function App() {
                             </tr>
                           </thead>
                           <tbody>
-                            {weapons.map(w => {
+                            {(weaponSearch
+                              ? weapons.filter(w =>
+                                  w.name.toLowerCase().includes(weaponSearch.toLowerCase()) ||
+                                  w.class.toLowerCase().includes(weaponSearch.toLowerCase()) ||
+                                  w.ammoType.toLowerCase().includes(weaponSearch.toLowerCase())
+                                )
+                              : weapons
+                            ).map(w => {
                               const base = w.tiers[0]?.stats;
                               return (
                                 <tr
@@ -880,7 +980,7 @@ export default function App() {
               >
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm font-mono uppercase tracking-[0.15em] text-secondary font-semibold">
-                    Skill Tree
+                    Raider Training
                   </h2>
                   <div className="flex items-center gap-2">
                     <div className="flex gap-0 border border-[rgb(var(--border-primary))]">
@@ -910,13 +1010,13 @@ export default function App() {
                       }}
                       className="px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border border-[rgb(var(--border-primary))] text-primary hover:bg-[rgb(var(--bg-elevated))] transition-all"
                     >
-                      Apply Recommended
+                      Metagame Allocation
                     </button>
                     <button
                       onClick={resetSkills}
                       className="px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.1em] border border-[rgb(var(--border-primary))] text-danger hover:bg-danger/10 transition-all"
                     >
-                      Reset All
+                      Unspec All
                     </button>
                   </div>
                 </div>
@@ -929,7 +1029,12 @@ export default function App() {
                     onRemove={removePoint}
                   />
                 ) : (
-                  <Suspense fallback={<div className="h-[600px] animate-pulse bg-[rgb(var(--bg-elevated))]" />}>
+                  <Suspense fallback={
+                    <div className="h-[600px] animate-pulse bg-[rgb(var(--bg-elevated))] flex flex-col items-center justify-center gap-3">
+                      <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+                      <p className="text-[10px] font-mono text-tertiary tracking-[0.1em]">RENDERING TRAINING DATA...</p>
+                    </div>
+                  }>
                     <SkillGraphView
                       allocation={allocation}
                       totalPoints={totalPoints}
@@ -1060,6 +1165,9 @@ export default function App() {
           <p className="text-[9px] text-tertiary font-mono uppercase tracking-[0.1em]">
             ARC Hub — Community tool. Not affiliated with Embark Studios.
           </p>
+          <p className="text-[9px] text-tertiary font-mono uppercase tracking-[0.1em]">
+            Built for Raiders, by Raiders.
+          </p>
           <p className="text-[8px] text-tertiary mt-1">
             Weapon &amp; shield data from{' '}
             <a
@@ -1103,6 +1211,7 @@ export default function App() {
         </footer>
       </div>
 
+      <Toast />
       {showSubmissionForm && (
         <Suspense fallback={null}>
           <BuildSubmissionForm

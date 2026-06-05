@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { weapons, getWeaponsByClass } from '../data/weapons';
 import { AMMO_COLORS } from '../types';
 import type { Weapon, WeaponClass, WeaponTier } from '../types';
+import { getWeaponImageUrl, getWeaponFallbackUrl } from '../utils/weaponImages';
 
 const CLASS_LABELS: Record<WeaponClass, string> = {
   'Assault Rifle': 'AR',
@@ -25,8 +26,8 @@ interface WeaponSelectorProps {
 export function WeaponSelector({ selectedId, selectedTier, onSelect, label = 'Primary' }: WeaponSelectorProps) {
   const [activeClass, setActiveClass] = useState<WeaponClass | 'all'>('all');
   const [expanded, setExpanded] = useState(false);
-  const [selectedImgError, setSelectedImgError] = useState(false);
-  const [gridImgErrors, setGridImgErrors] = useState<Set<string>>(new Set());
+  const [selectedImgSrc, setSelectedImgSrc] = useState<string>('');
+  const [gridImgSrcs, setGridImgSrcs] = useState<Map<string, string>>(new Map());
 
   const classes = Array.from(new Set<WeaponClass>(weapons.map(w => w.class)));
 
@@ -38,10 +39,27 @@ export function WeaponSelector({ selectedId, selectedTier, onSelect, label = 'Pr
     setExpanded(false);
   };
 
-  const imgSrc = selected ? `https://cdn.metaforge.app/arc-raiders/icons/${selected.id}.webp` : '';
+  const handleImgError = useCallback((weaponId: string, isSelected: boolean) => {
+    const fallback = getWeaponFallbackUrl(weaponId);
+    if (isSelected) {
+      setSelectedImgSrc(prev => prev === fallback ? '' : fallback);
+    } else {
+      setGridImgSrcs(prev => {
+        const next = new Map(prev);
+        const current = next.get(weaponId) || getWeaponImageUrl(weaponId);
+        next.set(weaponId, current === fallback ? '' : fallback);
+        return next;
+      });
+    }
+  }, []);
+
+  const getImgSrc = useCallback((weaponId: string, isSelected: boolean): string => {
+    if (isSelected) return selectedImgSrc || getWeaponImageUrl(weaponId);
+    return gridImgSrcs.get(weaponId) || getWeaponImageUrl(weaponId);
+  }, [selectedImgSrc, gridImgSrcs]);
 
   const handleSelection = (w: Weapon) => {
-    setSelectedImgError(false);
+    setSelectedImgSrc(getWeaponImageUrl(w.id));
     handleSelect(w);
   };
 
@@ -70,14 +88,14 @@ export function WeaponSelector({ selectedId, selectedTier, onSelect, label = 'Pr
         {selected ? (
           <div className="flex items-center gap-3">
             <div className="w-14 h-10 bg-[rgb(var(--bg-elevated))] flex items-center justify-center border border-[rgb(var(--border-primary))] rounded-sm overflow-hidden flex-shrink-0">
-              {selectedImgError || selected.ammoType === 'energy' ? (
+              {selected.ammoType === 'energy' ? (
                 <span className="text-lg opacity-40">⚔</span>
               ) : (
                 <img
-                  src={imgSrc}
+                  src={getImgSrc(selected.id, true)}
                   alt={selected.name}
                   className="w-full h-full object-contain"
-                  onError={() => setSelectedImgError(true)}
+                  onError={() => handleImgError(selected.id, true)}
                 />
               )}
             </div>
@@ -99,7 +117,7 @@ export function WeaponSelector({ selectedId, selectedTier, onSelect, label = 'Pr
             </span>
           </div>
         ) : (
-          <p className="text-xs text-tertiary">Select a weapon...</p>
+          <p className="text-xs text-tertiary">Select weapon...</p>
         )}
       </button>
 
@@ -172,14 +190,14 @@ export function WeaponSelector({ selectedId, selectedTier, onSelect, label = 'Pr
                   aria-selected={isSelected}
                 >
                   <div className="aspect-video bg-[rgb(var(--bg-elevated))] mb-1.5 flex items-center justify-center border border-[rgb(var(--border-primary))] rounded-sm overflow-hidden">
-                    {isDolabra || w.ammoType === 'energy' || gridImgErrors.has(w.id) ? (
+                    {isDolabra || w.ammoType === 'energy' || !getImgSrc(w.id, false) ? (
                       <span className="text-lg text-tertiary opacity-40">⚔</span>
                     ) : (
                       <img
-                        src={`https://cdn.metaforge.app/arc-raiders/icons/${w.id}.webp`}
+                        src={getImgSrc(w.id, false)}
                         alt={w.name}
                         className="w-full h-full object-contain transition-transform duration-200 hover:scale-110"
-                        onError={() => setGridImgErrors(prev => new Set(prev).add(w.id))}
+                        onError={() => handleImgError(w.id, false)}
                       />
                     )}
                   </div>

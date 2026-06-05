@@ -61,10 +61,10 @@ export function Logo({ className = '', size = 'md', showText = true }: LogoProps
             className="font-display font-bold text-accent tracking-tight leading-none"
             style={{ fontSize: size === 'sm' ? '14px' : size === 'md' ? '20px' : '32px' }}
           >
-            LOADOUT
+            ARC
           </div>
           <div className={`${subSizes[size]} font-mono text-tertiary uppercase tracking-[0.15em] leading-tight`}>
-            PLANNER
+            HUB
           </div>
         </div>
       )}

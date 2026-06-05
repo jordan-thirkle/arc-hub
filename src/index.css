@@ -115,7 +115,7 @@
 ::-webkit-scrollbar-thumb { background: rgb(var(--border-primary)); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgb(var(--text-tertiary)); }
 ::selection { background: rgb(var(--accent) / 0.3); color: rgb(var(--text-primary)); }
-html { scroll-behavior: smooth; }
+html { overflow-x: hidden; scroll-behavior: smooth; }
 
 body {
   background: rgb(var(--bg-page));

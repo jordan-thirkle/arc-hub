@@ -40,7 +40,7 @@ export function WeaponComparison() {
     <div className="space-y-4 p-4 border border-accent/30 bg-surface/80">
       <div className="flex items-center justify-between">
         <h2 className="text-xs font-mono uppercase tracking-[0.15em] text-secondary font-semibold">
-          Weapon Comparison
+          Weapon Compare
         </h2>
         <button
           onClick={handleClose}

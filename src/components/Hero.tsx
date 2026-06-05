@@ -60,9 +60,9 @@ export function Hero({ onStartBuilding, onBrowseDatabase, onMetaBuilds }: HeroPr
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-primary leading-[0.85] tracking-tight mb-4"
         >
-          LOADOUT
+          ARC
           <br />
-          <span className="text-gradient-accent">PLANNER</span>
+          <span className="text-gradient-accent">HUB</span>
         </motion.h1>
 
         <motion.p
@@ -93,7 +93,7 @@ export function Hero({ onStartBuilding, onBrowseDatabase, onMetaBuilds }: HeroPr
             transition={{ duration: 0.4, delay: 1.0 }}
             className="inline-block"
           >
-            Optimize
+            Deploy
           </motion.span>
           <motion.span
             initial={{ opacity: 0 }}
